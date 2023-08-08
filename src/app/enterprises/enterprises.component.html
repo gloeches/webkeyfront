@@ -1,0 +1,32 @@
+<h2>List of Enterprises</h2>
+<div>
+    <label for="Company Name">Company Name: </label>
+    <input id="Company Name" #enterpriseName>
+    <button type ="button" (click)="getEnterprisesLikeName(enterpriseName.value)">
+        <span> List companies by name</span>
+    </button>
+    <button type ="button" (click)="getEnterprises()">
+        <span> List companies </span>
+    </button>
+</div>
+<ul class="enterprises">
+    <li *ngFor="let enterprise of enterprises">
+        <button [class.selected]="enterprise === selectedEnterprise"
+        type = "button" (click)="onSelect(enterprise)">
+            <span class="badge">{{enterprise.id}}</span>
+            <span class="name">{{enterprise.name}}</span>
+        </button>
+    </li>
+</ul>
+<div *ngIf="selectedEnterprise">
+    <h2>{{selectedEnterprise.name | uppercase}} Details</h2>
+    <div>id: {{selectedEnterprise.id}}</div>
+    <div>
+      <label for="Company Name">Company Name: </label>
+      <input id="Company Name" [(ngModel)]="selectedEnterprise.name" placeholder="name">
+    </div>
+    <div>
+        <label for="Company Leader">Company Leader: </label>
+        <input id="Company Leader" [(ngModel)]="selectedEnterprise.projectLeader" placeholder="name">
+      </div>
+</div>
