@@ -3,6 +3,8 @@ import {Enterprise} from './enterprise'
 import { ENTERPRISES } from './mock-enterprises'
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { MessagesService } from './services/messages.service';
+import { VersionModel } from './model/version';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class EnterpriseService {
   private enterpriseUrl='http://localhost:8080/enterprises'
 
-  constructor( private http: HttpClient) { };
+  constructor( private http: HttpClient, private messageService: MessagesService) { };
+ 
   getEnterprises(): Observable<Enterprise[]>{
     console.log ('getEnterprises collecting data')
     console.log(this.enterpriseUrl)
@@ -22,5 +25,16 @@ export class EnterpriseService {
     console.log(url);
     return this.http.get<Enterprise[]>(url);
 
+  }
+  getLogin(){
+    const myUrl="http:/localhost:8080/login";
+    console.log("entering login: "+myUrl);
+    return this.http.get(myUrl);
+  }
+
+  getVersion(): Observable<VersionModel>{
+    const myUrl="http://localhost:8080/api/v1/auth/version";
+    console.log("entering version module: "+myUrl);
+    return this.http.get<VersionModel>(myUrl);
   }
 }

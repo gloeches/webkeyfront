@@ -24,9 +24,16 @@ export class EnterprisesComponent {
   getEnterprisesLikeName(_name:string):void{
     this.enterpriseService.getEnterpriseLikeName(_name).subscribe(enterprises => this.enterprises = enterprises);
   }
+
+  getLogin():void{
+    this.enterpriseService.getLogin();
+
+  }
   ngOnInit(): void {
  //   this.getEnterprises();
     console.log('inicializando');
+    this.getLogin();
+    
   }
   
 
