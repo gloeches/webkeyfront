@@ -1,3 +1,19 @@
 .example-spacer{
     flex: 1 1 auto;
   }
+
+  @media (max-width: 576px) { 
+    .navbar-brand{
+      display:none;
+    }
+    }
+
+.bg-agilent{
+  background-color: #0085D5;
+}
+
+.prueba{
+  text-decoration: underline;
+ 
+  
+}
