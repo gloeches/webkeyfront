@@ -19,6 +19,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { HeaderComponent } from './shared/header/header.component';
+import { SigupComponent } from './auth/sigup/sigup.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { HeaderComponent } from './shared/header/header.component';
     LoginComponent,
     VersionComponent,
     NavbarComponent,
-    HeaderComponent
+    HeaderComponent,
+    SigupComponent
   ],
   imports: [
     BrowserModule,

@@ -18,9 +18,19 @@ export class LoginComponent implements OnInit{
   }
 
   formSubmit(){
-    this.snack.open('formSubmit ejecutado !!','Aceptar',{
-      duration:3000
-    })
+    if(this.loginData.username.trim() == '' || this.loginData.username.trim() == null){
+      this.snack.open('El nombre de usuario es requerido !!','Aceptar',{
+        duration:3000
+      })
+      return;
+    }
+
+    if(this.loginData.password.trim() == '' || this.loginData.password.trim() == null){
+      this.snack.open('La contraseña es requerida !!','Aceptar',{
+        duration:3000
+      })
+      return;
+    }
     
   }
 

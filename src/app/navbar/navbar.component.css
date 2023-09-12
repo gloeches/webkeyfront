@@ -10,6 +10,8 @@
 
 .bg-agilent{
   background-color: #0085D5;
+  border-style: double none none none;
+  border-color: #0085E0
 }
 
 .prueba{
