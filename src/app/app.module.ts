@@ -7,7 +7,7 @@ import { EnterprisesComponent } from './enterprises/enterprises.component';
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 import { HttpClientModule} from '@angular/common/http';
 import { MessagesComponent } from './messages/messages.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './auth/login/login.component';
 import { VersionComponent } from './version/version.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -19,7 +19,9 @@ import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { HeaderComponent } from './shared/header/header.component';
-import { SigupComponent } from './auth/sigup/sigup.component';
+import { SigupComponent } from './auth/signup/sigup.component';
+import { authInterceptorProviders } from './services/auth-interceptor.service';
+import { MainUserComponent } from './pages/main-user/main-user.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { SigupComponent } from './auth/sigup/sigup.component';
     VersionComponent,
     NavbarComponent,
     HeaderComponent,
-    SigupComponent
+    SigupComponent,
+    MainUserComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,7 @@ import { SigupComponent } from './auth/sigup/sigup.component';
     MatButtonModule,
     MatSnackBarModule
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

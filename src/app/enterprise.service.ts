@@ -33,7 +33,8 @@ export class EnterpriseService {
   }
 
   getVersion(): Observable<VersionModel>{
-    const myUrl="http://localhost:8080/api/v1/auth/version";
+    const myUrl="http://springboot.local:8080/api/v1/auth/version";
+//    const myUrl="http://localhost:8080/api/v1/auth/version"
     console.log("entering version module: "+myUrl);
     return this.http.get<VersionModel>(myUrl);
   }
