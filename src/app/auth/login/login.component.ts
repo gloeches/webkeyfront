@@ -3,6 +3,10 @@ import { AuthService } from '../../services/auth.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from '../../services/login.service'
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs/internal/observable/throwError';
+import { ExchangeDataService } from 'src/app/services/exchange-data.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,17 +17,14 @@ export class LoginComponent implements OnInit{
     "email" : '',
     "password" : '',
   }
-  private loginError='';
-  constructor(private snack:MatSnackBar,private loginService:LoginService,private router:Router) { }
+  private loginError ='';
+  message: string="";
+  private subscription: Subscription = new Subscription;
+  constructor(private snack:MatSnackBar,private loginService:LoginService,private router:Router,  private data:ExchangeDataService) { }
   ngOnInit(): void {
+    this.subscription=this.data.CurrentMessage.subscribe(message => this.message = message)
   }
-/*  formSubmit(){
-    this.snack.open('formExecute click !!','Aceptar',{
-      duration:3000
-    })
-  }
-  */
- 
+
   formSubmit(){
     if(this.loginData.email.trim() == '' || this.loginData.email.trim() == null){
       this.snack.open('El nombre de usuario es requerido !!','Aceptar',{
@@ -38,19 +39,24 @@ export class LoginComponent implements OnInit{
       })
       return;
     }
-
+    this.loginService.cleanToken();
     this.loginService.generateToken(this.loginData).subscribe({
       next: (userData) => {
-         console.log('userData');
+         console.log('userData from subscribe:');
          console.log (userData); 
-          this.loginService.setUser (userData);   },
+         this.loginService.setUser (userData);   },
       error: (errorData)=>{
+        console.log("Error from subscribe: ")
         console.error(errorData);
         this.loginError=errorData;
+        this.snack.open(errorData.error,'Aceptar',{
+          duration:3000
+        })
+        this.handleError(errorData);
       },
       complete: () => {
         console.info("Login completo");
-        this.router.navigateByUrl('/main-user');
+        this.router.navigateByUrl('/enterprises');
       }
     }
  
@@ -58,4 +64,28 @@ export class LoginComponent implements OnInit{
     
   } 
 
+  private handleError(error: HttpErrorResponse) {
+    console.log("Entering handleError");
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
+        const errorMessage= 'Backend returned code + '+ error.status + ',body was: ' +error.error;
+        this.snack.open(errorMessage,'Aceptar',{
+          duration:5000
+        })
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(() => new Error('Something bad happened; please try again later.'));
+  }
+
+  enviaMensaje(){
+    console.log("enviado mensaje");
+    this.data.changeMessage("Enviado Mensaje");
+
+  }
 }

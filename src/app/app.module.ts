@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EnterprisesComponent } from './enterprises/enterprises.component';
+import { EnterprisesComponent } from './pages/enterprises/enterprises.component';
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 import { HttpClientModule} from '@angular/common/http';
 import { MessagesComponent } from './messages/messages.component';
@@ -22,6 +22,8 @@ import { HeaderComponent } from './shared/header/header.component';
 import { SigupComponent } from './auth/signup/sigup.component';
 import { authInterceptorProviders } from './services/auth-interceptor.service';
 import { MainUserComponent } from './pages/main-user/main-user.component';
+import { KeypasComponent } from './pages/keypass/keypas.component';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { MainUserComponent } from './pages/main-user/main-user.component';
     NavbarComponent,
     HeaderComponent,
     SigupComponent,
-    MainUserComponent
+    MainUserComponent,
+    KeypasComponent
   ],
   imports: [
     BrowserModule,

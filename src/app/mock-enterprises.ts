@@ -1,4 +1,4 @@
-import {Enterprise} from './enterprise'
+import {Enterprise} from './pages/enterprises/enterprise'
 
 export const ENTERPRISES: Enterprise[]=[
     {id:1, name: 'empresa 1', projectLeader: 'Chema'},

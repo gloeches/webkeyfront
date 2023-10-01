@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnterpriseService } from '../enterprise.service';
+import { EnterpriseService } from '../services/enterprise.service';
 import { VersionModel } from '../model/version';
 @Component({
   selector: 'app-version',

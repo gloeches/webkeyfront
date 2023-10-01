@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Enterprise } from '../enterprise';
+import { Enterprise } from './enterprise';
 //import {ENTERPRISES} from '../mock-enterprises'
-import { EnterpriseService } from '../enterprise.service';
+import { EnterpriseService } from '../../services/enterprise.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-enterprises',
@@ -11,7 +12,7 @@ import { EnterpriseService } from '../enterprise.service';
 export class EnterprisesComponent {
   
   enterprises: Enterprise[]=[];
-  constructor(private enterpriseService: EnterpriseService){}
+  constructor(private router: Router,private enterpriseService: EnterpriseService){}
   selectedEnterprise?: Enterprise;
   onSelect(enterprise: Enterprise):void {
     this.selectedEnterprise=enterprise;
@@ -30,9 +31,9 @@ export class EnterprisesComponent {
 
   }
   ngOnInit(): void {
- //   this.getEnterprises();
+    this.getEnterprises();
     console.log('inicializando');
-    this.getLogin();
+ //   this.getLogin();
     
   }
   

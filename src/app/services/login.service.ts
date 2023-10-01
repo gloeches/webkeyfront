@@ -38,5 +38,9 @@ export class LoginService {
     return true;
   }
 
+  public cleanToken(){
+    sessionStorage.clear();
+  }
+
 
 }

@@ -3,10 +3,7 @@
     <label for="Company Name">Company Name: </label>
     <input id="Company Name" #enterpriseName>
     <button type ="button" (click)="getEnterprisesLikeName(enterpriseName.value)">
-        <span> List companies by name</span>
-    </button>
-    <button type ="button" (click)="getEnterprises()">
-        <span> List companies </span>
+        <span> Filter by name</span>
     </button>
 </div>
 <div *ngIf="selectedEnterprise">
@@ -22,13 +19,23 @@
       </div>
 </div>
 
-<ul class="enterprises">
-    <li *ngFor="let enterprise of enterprises">
-        <button [class.selected]="enterprise === selectedEnterprise"
-        type = "button" (click)="onSelect(enterprise)">
-            <span class="badge">{{enterprise.id}}</span>
-            <span class="name">{{enterprise.name}}</span>
-        </button>
-    </li>
-</ul>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Company Name</th>
+            <th>Project leader</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let enterprise  of enterprises">
+            <td>{{ enterprise.id }}</td>
+            <td>{{ enterprise.name }}</td>
+            <td>{{ enterprise.projectLeader }}</td>
+            <td>
+                <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="btn btn-info">View</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 

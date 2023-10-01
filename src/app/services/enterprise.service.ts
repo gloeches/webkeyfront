@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import {Enterprise} from './enterprise'
-import { ENTERPRISES } from './mock-enterprises'
+import {Enterprise} from '../pages/enterprises/enterprise'
+import { ENTERPRISES } from '../mock-enterprises'
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MessagesService } from './services/messages.service';
-import { VersionModel } from './model/version';
+import { MessagesService } from './messages.service';
+import { VersionModel } from '../model/version';
+import { apiUrl, rootUrl } from 'src/app/shared/header/constants';
+import { authUrl }  from 'src/app/shared/header/constants';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnterpriseService {
-  private enterpriseUrl='http://localhost:8080/enterprises'
+  private enterpriseUrl=`${rootUrl}${apiUrl}/enterprises`;
 
   constructor( private http: HttpClient, private messageService: MessagesService) { };
  
@@ -33,7 +36,8 @@ export class EnterpriseService {
   }
 
   getVersion(): Observable<VersionModel>{
-    const myUrl="http://springboot.local:8080/api/v1/auth/version";
+    
+    const myUrl=`${rootUrl}${authUrl}/version`;
 //    const myUrl="http://localhost:8080/api/v1/auth/version"
     console.log("entering version module: "+myUrl);
     return this.http.get<VersionModel>(myUrl);

@@ -1,0 +1,20 @@
+<p>keypas works!</p>
+<p>selected id: {{id}}</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>user</th>
+            <th>password</th>
+            <th>notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let keypass  of keypasses">
+            <td>{{ keypass.id }}</td>
+            <td>{{ keypass.username }}</td>
+            <td>{{ keypass.password }}</td>
+            <td>{{ keypass.notes }}</td>
+        </tr>
+    </tbody>
+</table>
