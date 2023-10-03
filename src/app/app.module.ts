@@ -23,6 +23,7 @@ import { SigupComponent } from './auth/signup/sigup.component';
 import { authInterceptorProviders } from './services/auth-interceptor.service';
 import { MainUserComponent } from './pages/main-user/main-user.component';
 import { KeypasComponent } from './pages/keypass/keypas.component';
+import { EnterpriseCreateComponent } from './pages/enterprise-create/enterprise-create.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { KeypasComponent } from './pages/keypass/keypas.component';
     HeaderComponent,
     SigupComponent,
     MainUserComponent,
-    KeypasComponent
+    KeypasComponent,
+    EnterpriseCreateComponent
   ],
   imports: [
     BrowserModule,

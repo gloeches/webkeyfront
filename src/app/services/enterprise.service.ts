@@ -13,20 +13,30 @@ import { authUrl }  from 'src/app/shared/header/constants';
   providedIn: 'root'
 })
 export class EnterpriseService {
-  private enterpriseUrl=`${rootUrl}${apiUrl}/enterprises`;
-
+  private enterpriseUrl=`${rootUrl}${apiUrl}/enterprise`;
+  private enterprisesUrl=`${rootUrl}${apiUrl}/enterprises`;
+  httpOptions={
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
+  };
   constructor( private http: HttpClient, private messageService: MessagesService) { };
  
   getEnterprises(): Observable<Enterprise[]>{
     console.log ('getEnterprises collecting data')
-    console.log(this.enterpriseUrl)
-    return this.http.get<Enterprise[]>(this.enterpriseUrl);
+    console.log(this.enterprisesUrl)
+    return this.http.get<Enterprise[]>(this.enterprisesUrl);
   }
   getEnterpriseLikeName(_name: string): Observable<Enterprise[]>{
-    const mainUrl=this.enterpriseUrl;
+    const mainUrl=this.enterprisesUrl;
     const url=mainUrl+'?name='+_name;
     console.log(url);
     return this.http.get<Enterprise[]>(url);
+
+  }
+  getEnterpriseById(id:number): Observable<Enterprise>{
+    const mainUrl=this.enterpriseUrl;
+    const url=mainUrl+'/'+id;
+    console.log("from getEnterpriseById:"+url);
+    return this.http.get<Enterprise>(url);
 
   }
   getLogin(){
@@ -41,5 +51,9 @@ export class EnterpriseService {
 //    const myUrl="http://localhost:8080/api/v1/auth/version"
     console.log("entering version module: "+myUrl);
     return this.http.get<VersionModel>(myUrl);
+  }
+
+  public addEnterprise(enterprise:Enterprise){
+    return this.http.post(`${this.enterpriseUrl}`,enterprise);
   }
 }

@@ -14,6 +14,9 @@ export class EnterprisesComponent {
   enterprises: Enterprise[]=[];
   constructor(private router: Router,private enterpriseService: EnterpriseService){}
   selectedEnterprise?: Enterprise;
+  _enterprise?:Enterprise;
+
+  
   onSelect(enterprise: Enterprise):void {
     this.selectedEnterprise=enterprise;
     console.log ("click done "+this.selectedEnterprise.name+ "leaderProject: "+this.selectedEnterprise.projectLeader);
@@ -25,10 +28,13 @@ export class EnterprisesComponent {
   getEnterprisesLikeName(_name:string):void{
     this.enterpriseService.getEnterpriseLikeName(_name).subscribe(enterprises => this.enterprises = enterprises);
   }
-
+  
   getLogin():void{
     this.enterpriseService.getLogin();
 
+  }
+  createEnterprise():void{
+    this.router.navigateByUrl('/enterpriseCreate');
   }
   ngOnInit(): void {
     this.getEnterprises();

@@ -1,10 +1,21 @@
 <h2>List of Enterprises</h2>
-<div>
-    <label for="Company Name">Company Name: </label>
-    <input id="Company Name" #enterpriseName>
-    <button type ="button" (click)="getEnterprisesLikeName(enterpriseName.value)">
-        <span> Filter by name</span>
-    </button>
+<div class="d-flex justify-content-center p-2 bd-highlight">
+    <div class="p-2">
+        <label for="Company Name">Company Name: </label>
+    </div>
+    <div class="p-2">
+        <input id="Company Name" #enterpriseName>
+    </div>
+    <div class="p-1">
+        <button class="btn btn-info p-2" type ="button" (click)="getEnterprisesLikeName(enterpriseName.value)">
+            <span> Filter by name</span>
+        </button>
+    </div>
+    <div class="p-1">
+        <button class="btn btn-info p-2" type ="button" (click)="createEnterprise()">
+            <span> Create Enterprise</span>
+        </button>
+    </div>
 </div>
 <div *ngIf="selectedEnterprise">
     <h2>{{selectedEnterprise.name | uppercase}} Details</h2>
@@ -22,15 +33,15 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Company Name</th>
+            <th data-field="ID" data-width="100">ID</th>
+            <th data-field="nane" data-width="50">Company Name </th>
             <th>Project leader</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let enterprise  of enterprises">
             <td>{{ enterprise.id }}</td>
-            <td>{{ enterprise.name }}</td>
+            <td data-field="nane" data-width="50">{{ enterprise.name }}</td>
             <td>{{ enterprise.projectLeader }}</td>
             <td>
                 <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="btn btn-info">View</a>
