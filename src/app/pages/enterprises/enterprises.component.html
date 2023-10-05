@@ -45,6 +45,7 @@
             <td>{{ enterprise.projectLeader }}</td>
             <td>
                 <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="btn btn-info">View</a>
+                <a href="#" [routerLink]="['/enterprise/',enterprise.id,'createKeypass']" class="btn btn-info">Add Key</a>
             </td>
         </tr>
     </tbody>

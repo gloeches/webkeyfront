@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EnterprisesComponent } from './pages/enterprises/enterprises.component';
-import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { FormGroup, FormsModule } from '@angular/forms'; // <-- NgModel lives here
 import { HttpClientModule} from '@angular/common/http';
 import { MessagesComponent } from './messages/messages.component';
 import { LoginComponent } from './auth/login/login.component';
@@ -24,6 +24,10 @@ import { authInterceptorProviders } from './services/auth-interceptor.service';
 import { MainUserComponent } from './pages/main-user/main-user.component';
 import { KeypasComponent } from './pages/keypass/keypas.component';
 import { EnterpriseCreateComponent } from './pages/enterprise-create/enterprise-create.component';
+import { KeypassCreateComponent } from './pages/keypass-create/keypass-create.component';
+import { TestFormgroupComponent } from './dev/test-formgroup/test-formgroup.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SubmitResetComponent } from './dev/submit-reset/submit-reset.component';
 
 
 @NgModule({
@@ -38,7 +42,10 @@ import { EnterpriseCreateComponent } from './pages/enterprise-create/enterprise-
     SigupComponent,
     MainUserComponent,
     KeypasComponent,
-    EnterpriseCreateComponent
+    EnterpriseCreateComponent,
+    KeypassCreateComponent,
+    TestFormgroupComponent,
+    SubmitResetComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +58,7 @@ import { EnterpriseCreateComponent } from './pages/enterprise-create/enterprise-
     MatCardModule,
     MatInputModule,
     MatButtonModule,
+    ReactiveFormsModule,
     MatSnackBarModule
   ],
   providers: [authInterceptorProviders],

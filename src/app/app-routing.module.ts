@@ -7,15 +7,19 @@ import { SigupComponent } from './auth/signup/sigup.component';
 import { MainUserComponent } from './pages/main-user/main-user.component';
 import { KeypasComponent } from './pages/keypass/keypas.component';
 import { EnterpriseCreateComponent } from './pages/enterprise-create/enterprise-create.component';
+import { KeypassCreateComponent } from './pages/keypass-create/keypass-create.component';
+import { TestFormgroupComponent } from './dev/test-formgroup/test-formgroup.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'enterprises', component: EnterprisesComponent},
   {path: 'enterprises/:id/keypass', component: KeypasComponent},
+  {path: 'enterprise/:id/createKeypass', component: KeypassCreateComponent},
   {path: 'logout', component: LoginComponent},
   {path: 'version', component: VersionComponent},
   {path: 'main-user', component: MainUserComponent},
   {path: 'enterpriseCreate', component: EnterpriseCreateComponent},
+  {path: 'testformgroup', component: TestFormgroupComponent},
   {path: 'sigup' , component:SigupComponent}
 ];
 

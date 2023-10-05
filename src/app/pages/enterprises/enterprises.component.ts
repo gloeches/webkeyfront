@@ -3,6 +3,7 @@ import { Enterprise } from './enterprise';
 //import {ENTERPRISES} from '../mock-enterprises'
 import { EnterpriseService } from '../../services/enterprise.service';
 import { Router } from '@angular/router';
+import { KeypassService } from 'src/app/services/keypass.service';
 
 @Component({
   selector: 'app-enterprises',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
 export class EnterprisesComponent {
   
   enterprises: Enterprise[]=[];
-  constructor(private router: Router,private enterpriseService: EnterpriseService){}
+  constructor(private router: Router,private enterpriseService: EnterpriseService, private keypassService:KeypassService){}
   selectedEnterprise?: Enterprise;
   _enterprise?:Enterprise;
 
@@ -36,6 +37,8 @@ export class EnterprisesComponent {
   createEnterprise():void{
     this.router.navigateByUrl('/enterpriseCreate');
   }
+
+  
   ngOnInit(): void {
     this.getEnterprises();
     console.log('inicializando');
