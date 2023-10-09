@@ -16,6 +16,9 @@
             <td>{{ keypass.username }}</td>
             <td>{{ keypass.password }}</td>
             <td>{{ keypass.notes }}</td>
+            <td>
+                <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',keypass.id]" class="btn btn-info">Edit</a>
+             </td>
         </tr>
     </tbody>
 </table>

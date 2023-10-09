@@ -12,6 +12,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class KeypassCreateComponent {
   public enterpriseId:number=0;
+  public keypassId:number=0;
   public keypass:Keypass={
     id:0,
     username:'',
@@ -22,7 +23,16 @@ export class KeypassCreateComponent {
   constructor(private snack:MatSnackBar,private router:Router,private route: ActivatedRoute,private keypassService:KeypassService) { }
   ngOnInit(): void {
     this.enterpriseId=this.route.snapshot.params['id'];
-    console.log('keypass component: OnInit params: ', this.enterpriseId ,' selected');
+    this.keypassId=this.route.snapshot.params['idk'];
+    console.log('keypass component: OnInit params: ', this.enterpriseId ,' selected:',this.keypassId);
+    if (this.keypassId!=0) {
+      this.keypassService.findKeypassById(this.keypassId)
+      this.keypass.username="editar";
+      this.keypass.password="editar";
+      this.keypass.notes="editar"
+      this.keypass.id=this.keypassId;
+      console.log("createKeypass in edit mode: ");
+    }
   }
   formSubmit(){
     console.log("from keypass-create component: click formSubmit ")
@@ -43,11 +53,17 @@ export class KeypassCreateComponent {
       verticalPosition : 'top',
       horizontalPosition : 'right'
     });
+    if(this.keypassId!=0){
+      this.router.navigateByUrl('/version');
+    }
+    else{
+
+    
     this.keypass.username="another user?";
     this.keypass.notes='';
     this.keypass.password='';
     //  this.router.navigateByUrl('/version');
-    
+    }
   }
 
   
