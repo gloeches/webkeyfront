@@ -28,10 +28,10 @@ httpOptions={
       return of(result as T);
     };
   }
-  findKeypassById(id:number):Observable<Keypass[]>{
+  findKeypassById(id:number):Observable<Keypass>{
     console.log("keypass service: findKeypassById");
     this.fullApiURL=this.apiURL+"/keypass/"+id;
-    return this.httpCliente.get<Keypass[]>(this.fullApiURL)
+    return this.httpCliente.get<Keypass>(this.fullApiURL)
   }
   findAllKeypassByEnterpriseId(id:number):Observable<Keypass[]>{
     console.log ('findAllKeypassByEnterpriseId collecting data');
