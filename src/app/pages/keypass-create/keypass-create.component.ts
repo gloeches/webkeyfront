@@ -26,9 +26,7 @@ export class KeypassCreateComponent {
     this.keypassId=this.route.snapshot.params['idk'];
     console.log('keypass component: OnInit params: ', this.enterpriseId ,' selected:',this.keypassId);
     if (this.keypassId!=0) {
-      this.keypassService.findKeypassById(this.keypassId)
-      this.keypass.username="editar";
-      this.keypass.password="editar";
+      this.keypassService.findKeypassById(this.keypassId).subscribe(_keypass => this.keypass = _keypass)
       this.keypass.notes="editar"
       this.keypass.id=this.keypassId;
       console.log("createKeypass in edit mode: ");

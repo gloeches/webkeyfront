@@ -16,6 +16,7 @@
             <span> Create Enterprise</span>
         </button>
     </div>
+   
 </div>
 <div *ngIf="selectedEnterprise">
     <h2>{{selectedEnterprise.name | uppercase}} Details</h2>
@@ -36,6 +37,8 @@
             <th data-field="ID" data-width="100">ID</th>
             <th data-field="nane" data-width="50">Company Name </th>
             <th>Project leader</th>
+            <th>Company</th>
+            <th>Keypass</th>
         </tr>
     </thead>
     <tbody>
@@ -43,9 +46,15 @@
             <td>{{ enterprise.id }}</td>
             <td data-field="nane" data-width="50">{{ enterprise.name }}</td>
             <td>{{ enterprise.projectLeader }}</td>
+            <td> 
+                <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="patata"><i class="material-icons" data-toggle="tooltip" title="edit Company">edit </i></a>
+            </td>
             <td>
-                <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="btn btn-info">View</a>
-                <a href="#" [routerLink]="['/enterprise/',enterprise.id,'createKeypass']" class="btn btn-info">Add Key</a>
+ <!--              <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="btn btn-info">View</a>
+                <a href="#" [routerLink]="['/enterprise/',enterprise.id,'createKeypass']" class="btn btn-info">Add Key</a>   --> 
+                <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="View list of keypass">visibility</i></a>
+               
+                <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',0]" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Add keypass">add_to_photos</i></a>
             </td>
         </tr>
     </tbody>
