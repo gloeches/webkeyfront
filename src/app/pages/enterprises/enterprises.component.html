@@ -48,12 +48,13 @@
             <td>{{ enterprise.projectLeader }}</td>
             <td> 
                 <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="patata"><i class="material-icons" data-toggle="tooltip" title="edit Company">edit </i></a>
+                <a class="edit"(click)="deleteEnterprise(enterprise)"><i class="material-icons" data-toggle="tooltip" title="edit Company">delete_forever </i></a>
+   
             </td>
             <td>
  <!--              <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="btn btn-info">View</a>
                 <a href="#" [routerLink]="['/enterprise/',enterprise.id,'createKeypass']" class="btn btn-info">Add Key</a>   --> 
                 <a href="#" [routerLink]="['/enterprises/',enterprise.id,'keypass']" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="View list of keypass">visibility</i></a>
-               
                 <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',0]" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Add keypass">add_to_photos</i></a>
             </td>
         </tr>

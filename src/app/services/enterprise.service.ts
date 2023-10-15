@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Enterprise} from '../pages/enterprises/enterprise'
 import { ENTERPRISES } from '../mock-enterprises'
-import { Observable, of } from 'rxjs';
+import { Observable, catchError, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessagesService } from './messages.service';
 import { VersionModel } from '../model/version';
@@ -55,5 +55,12 @@ export class EnterpriseService {
 
   public addEnterprise(enterprise:Enterprise){
     return this.http.post(`${this.enterpriseUrl}`,enterprise);
+  }
+  public deleteEnterprise(id:number):Observable<Enterprise>{
+    const url=`${this.enterpriseUrl}/${id}`;
+    return this.http.delete<Enterprise>(url,this.httpOptions).pipe(
+      tap(_ => console.log (`deleted enterprise id=${id}`))
+    );
+
   }
 }

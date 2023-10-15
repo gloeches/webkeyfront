@@ -17,7 +17,12 @@ export class EnterprisesComponent {
   selectedEnterprise?: Enterprise;
   _enterprise?:Enterprise;
 
-  
+  ngOnInit(): void {
+    this.getEnterprises();
+    console.log('inicializando');
+ //   this.getLogin();
+    
+  }
   onSelect(enterprise: Enterprise):void {
     this.selectedEnterprise=enterprise;
     console.log ("click done "+this.selectedEnterprise.name+ "leaderProject: "+this.selectedEnterprise.projectLeader);
@@ -38,13 +43,14 @@ export class EnterprisesComponent {
     this.router.navigateByUrl('/enterpriseCreate');
   }
 
-  
-  ngOnInit(): void {
-    this.getEnterprises();
-    console.log('inicializando');
- //   this.getLogin();
-    
+  deleteEnterprise(enterprise:Enterprise):void{
+    console.log("click delete enterprise ");
+    this.enterprises=this.enterprises.filter(h=>h!==enterprise);
+    this.enterpriseService.deleteEnterprise(enterprise.id).subscribe();
+    this._enterprise=enterprise;
   }
+
+  
   
 
 

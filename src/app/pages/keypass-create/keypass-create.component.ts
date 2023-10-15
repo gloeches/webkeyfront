@@ -46,7 +46,7 @@ export class KeypassCreateComponent {
       console.log('keypass created successfully: '+ res.username);
     })
 
-    this.snack.open('Claves insrtadas adecuadamene !!','Aceptar',{
+    this.snack.open('Claves insertadas adecuadamene !!','Aceptar',{
       duration : 3000,
       verticalPosition : 'top',
       horizontalPosition : 'right'
@@ -62,6 +62,11 @@ export class KeypassCreateComponent {
     this.keypass.password='';
     //  this.router.navigateByUrl('/version');
     }
+  }
+
+  onBack(){
+    console.log("return to enterprises")
+    this.router.navigateByUrl('/enterprises');
   }
 
   
