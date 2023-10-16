@@ -4,6 +4,8 @@ import { Enterprise } from './enterprise';
 import { EnterpriseService } from '../../services/enterprise.service';
 import { Router } from '@angular/router';
 import { KeypassService } from 'src/app/services/keypass.service';
+import { MessagesService } from 'src/app/services/messages.service';
+
 
 @Component({
   selector: 'app-enterprises',
@@ -13,7 +15,7 @@ import { KeypassService } from 'src/app/services/keypass.service';
 export class EnterprisesComponent {
   
   enterprises: Enterprise[]=[];
-  constructor(private router: Router,private enterpriseService: EnterpriseService, private keypassService:KeypassService){}
+  constructor(private router: Router,private enterpriseService: EnterpriseService, private keypassService:KeypassService,private confirmation:MessagesService){}
   selectedEnterprise?: Enterprise;
   _enterprise?:Enterprise;
 
@@ -44,10 +46,15 @@ export class EnterprisesComponent {
   }
 
   deleteEnterprise(enterprise:Enterprise):void{
+    let testMessagesService:MessagesService;
     console.log("click delete enterprise ");
-    this.enterprises=this.enterprises.filter(h=>h!==enterprise);
-    this.enterpriseService.deleteEnterprise(enterprise.id).subscribe();
-    this._enterprise=enterprise;
+    console.log(this.confirmation.confirmDialog('a'))
+
+
+
+   // this.enterprises=this.enterprises.filter(h=>h!==enterprise);
+   // this.enterpriseService.deleteEnterprise(enterprise.id).subscribe();
+   // this._enterprise=enterprise;
   }
 
   
