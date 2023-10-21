@@ -11,26 +11,28 @@
         <li class="nav-item">
           <a class="nav-link" aria-current="page" [routerLink]="'/'">Home</a>
         </li>
-        <li class="nav-item">
+        <li *ngIf="!isLoggedIn" class="nav-item">
           <a class="nav-link" [routerLink]="'/login'" routerLinkActive="active-link" >Login</a>
         </li>
-        <li class="nav-item">
+        <li *ngIf="!isLoggedIn" class="nav-item">
           <a class="nav-link" [routerLink]="'/sigup'" aligne >sigup</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="'/version'"routerLinkActive="active-link">Version</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="'/main-user'">Test API</a>
-        </li>
-        <li class="nav-item">
+
+        
+        <li *ngIf="isLoggedIn" class="nav-item">
           <a class="nav-link" [routerLink]="'/enterprises'">Enterprises</a>
         </li>
-        <li class="nav-item">
+ <!--       <li class="nav-item">
           <a class="nav-link" [routerLink]="'/testformgroup'">TestFormgroup</a>
+        </li>
+        <li *ngIf="isLoggedIn"class="nav-item">
+          <a class="nav-link" [routerLink]="'/main-user'">Test API</a>
         </li>
         <li class="nav-item text-end">
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled {{ message }}</a>
+        </li> -->
+        <li class="nav-item text-end">
+          <a class="nav-link text-end" [routerLink]="'/version'"routerLinkActive="active-link">Version</a>
         </li>
       </ul>
       

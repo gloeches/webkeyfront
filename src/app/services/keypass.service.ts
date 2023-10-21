@@ -48,4 +48,13 @@ httpOptions={
       catchError(this.handleError<Keypass>('addkeypass'))
     )
   }
+  public deleteKeypass(id:number):Observable<Keypass>{
+    this.fullApiURL=`${this.apiURL}/keypass/${id}`;
+    console.log(`deleteKeypass url: ${this.fullApiURL}`);
+    return this.httpCliente.get<Keypass>(this.fullApiURL)
+//    return this.http.delete<Enterprise>(url,this.httpOptions).pipe(
+//    tap(_ => console.log (`deleted enterprise id=${id}`))
+ //   );
+
+  }
 }

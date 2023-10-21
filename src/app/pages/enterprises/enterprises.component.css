@@ -10,7 +10,9 @@
   .enterprises li {
     display: flex;
   }
-  
+  .edit{
+    cursor: pointer;
+  }
   .enterprises button {
     flex: 1;
     cursor: pointer;

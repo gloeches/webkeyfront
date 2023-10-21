@@ -19,10 +19,13 @@ export class LoginComponent implements OnInit{
   }
   private loginError ='';
   message: string="";
+  loginStatus:boolean=false;
   private subscription: Subscription = new Subscription;
+  private subscriptionStatus: Subscription=new Subscription;
   constructor(private snack:MatSnackBar,private loginService:LoginService,private router:Router,  private data:ExchangeDataService) { }
   ngOnInit(): void {
     this.subscription=this.data.CurrentMessage.subscribe(message => this.message = message)
+    this.subscriptionStatus=this.data.CurrentStatus.subscribe(status => this.loginStatus=status )
   }
 
   formSubmit(){
@@ -56,6 +59,8 @@ export class LoginComponent implements OnInit{
       },
       complete: () => {
         console.info("Login completo");
+        this.enviaMensaje();
+        this.changeStatus(true);
         this.router.navigateByUrl('/enterprises');
       }
     }
@@ -87,5 +92,9 @@ export class LoginComponent implements OnInit{
     console.log("enviado mensaje");
     this.data.changeMessage("Enviado Mensaje");
 
+  }
+  changeStatus(status:boolean){
+    console.log("change login status to "+status);
+    this.data.changeStatus(status);
   }
 }

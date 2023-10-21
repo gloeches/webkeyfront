@@ -9,8 +9,10 @@ import { KeypasComponent } from './pages/keypass/keypas.component';
 import { EnterpriseCreateComponent } from './pages/enterprise-create/enterprise-create.component';
 import { KeypassCreateComponent } from './pages/keypass-create/keypass-create.component';
 import { TestFormgroupComponent } from './dev/test-formgroup/test-formgroup.component';
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
+  {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'enterprises', component: EnterprisesComponent},
   {path: 'enterprises/:id/keypass', component: KeypasComponent},

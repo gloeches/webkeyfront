@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit{
   constructor(private data:ExchangeDataService){}
   ngOnInit(): void {
     this.subcription=this.data.CurrentMessage.subscribe(message => this.message=message);
+    this.subcription=this.data.CurrentStatus.subscribe(status=>this.isLoggedIn=status);
   }
   
 }

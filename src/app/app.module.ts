@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SubmitResetComponent } from './dev/submit-reset/submit-reset.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { MessagesDialogComponent } from './messages/messages-dialog/messages-dialog.component';
+import { HomeComponent } from './pages/home/home.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { MessagesDialogComponent } from './messages/messages-dialog/messages-dia
     KeypassCreateComponent,
     TestFormgroupComponent,
     MessagesDialogComponent,
-    SubmitResetComponent
+    SubmitResetComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

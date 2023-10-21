@@ -2,12 +2,12 @@
   <div class = "container">
     <div class = "row mt20">
       <div class = "col-md-6 offset-md-3">
-        <mat-card>
+        
           <div class = "container text-center">
             <img src="../../../assets/login.png" width = "100" height = "100">
           </div>
 
-          <h1 class = "text-center">Inicio de sesión {{ message }}</h1>
+          <h1 class = "text-center">Inicio de sesión</h1>
           <form (ngSubmit) = "formSubmit()">
             <mat-form-field class = "full-width"  appearance = "outline">
               <mat-label>Nombre de usuario</mat-label>
@@ -23,13 +23,14 @@
             <br><br>
 
             <div class = "container text-center">
-              <button type = "submit" mat-raised-button color="primary">Iniciar sesión</button>
-              <button type="reset" style = "margin-left: 20px;" mat-raised-button color="accent">Limpiar</button>
-              <button type="button" (myClick)="enviaMensaje()" clickable>pulsar</button>
-              <button (click)="enviaMensaje()"></button>
+              <button type = "submit" mat-raised-button color="primary">Login</button>
+              <button type="reset" style = "margin-left: 20px;" mat-raised-button color="primary">Clear</button>
+              <button type="button" style = "margin-left: 20px;" mat-raised-button color="primary" (myClick)="enviaMensaje()">Register</button>
+     <!--         <button type="button" (myClick)="enviaMensaje()" clickable>pulsar</button>
+              <button (click)="enviaMensaje()"></button>  -->
             </div>
           </form>
-        </mat-card>
+       
       </div>
     </div>
   </div>
