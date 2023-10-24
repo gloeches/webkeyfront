@@ -52,7 +52,7 @@ export class KeypassCreateComponent {
       horizontalPosition : 'right'
     });
     if(this.keypassId!=0){
-      this.router.navigateByUrl('/version');
+      this.router.navigateByUrl(`enterprises/${this.enterpriseId}/keypass`);
     }
     else{
 

@@ -13,4 +13,7 @@ export class HomeComponent {
   sendToLogin(){
     this.router.navigateByUrl('/login');
   }
+  sendToSignup(){
+    this.router.navigateByUrl('/sigup');
+  }
 }

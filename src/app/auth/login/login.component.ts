@@ -92,9 +92,13 @@ export class LoginComponent implements OnInit{
     console.log("enviado mensaje");
     this.data.changeMessage("Enviado Mensaje");
 
+
   }
   changeStatus(status:boolean){
     console.log("change login status to "+status);
     this.data.changeStatus(status);
+  }
+  goToRegister(){
+    this.router.navigateByUrl("/sigup");
   }
 }

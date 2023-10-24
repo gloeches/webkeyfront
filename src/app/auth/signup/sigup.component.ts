@@ -25,7 +25,7 @@ export class SigupComponent {
   formSubmit(){
     console.log(this.user);
     if(this.user.email == '' || this.user.email == null){
-      this.snack.open('El Email del usuario es requerido !!','Aceptar',{
+      this.snack.open('Missing Email information !!','Ok',{
         duration : 3000,
         verticalPosition : 'top',
         horizontalPosition : 'right'
@@ -40,6 +40,11 @@ export class SigupComponent {
       error: (errorData)=>{
         console.error(errorData);
         this.loginError=errorData;
+        this.snack.open('Forbidden action !!','Ok',{
+          duration : 3000,
+          verticalPosition : 'top',
+          horizontalPosition : 'right'
+        });
       },
       complete: () => {
         console.info("Signup completo");

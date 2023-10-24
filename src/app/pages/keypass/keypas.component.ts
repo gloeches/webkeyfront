@@ -45,7 +45,7 @@ export class KeypasComponent implements OnInit{
     let testMessagesService:MessagesService;
     console.log("click delete keypass ");
 //    console.log(this.confirmation.confirmDialog('a'))
-    const result=confirm(`Do you really want to delete ${keypass.username} company?` );
+    const result=confirm(`Do you really want to delete ${keypass.username} key?` );
     if (result) {
       this.keypasses=this.keypasses.filter(h=>h!==keypass);
       this.keypassService.deleteKeypass(keypass.id).subscribe();

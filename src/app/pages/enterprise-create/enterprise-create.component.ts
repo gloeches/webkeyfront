@@ -29,7 +29,7 @@ export class EnterpriseCreateComponent {
     this.enterpriseServie.addEnterprise(this.enterprise).subscribe((res:any) => {
       console.log('Enterprise created successfully: '+ res.name);
     })
-    this.router.navigateByUrl('/version');
+    this.router.navigateByUrl('/enterprises');
   }
 
 }
