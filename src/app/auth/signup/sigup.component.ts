@@ -20,12 +20,21 @@ export class SigupComponent {
   }
   private baserUrl='http://localhost:8080';
   private loginError:string="";
+  public showPassword: boolean = false;
  
   constructor(private http:HttpClient,private signupService:SignupService,private snack:MatSnackBar, private router:Router) { }
   formSubmit(){
     console.log(this.user);
     if(this.user.email == '' || this.user.email == null){
       this.snack.open('Missing Email information !!','Ok',{
+        duration : 3000,
+        verticalPosition : 'top',
+        horizontalPosition : 'right'
+      });
+      return;
+    }
+    if(this.user.password == '' || this.user.password == null){
+      this.snack.open('Missing Password information !!','Ok',{
         duration : 3000,
         verticalPosition : 'top',
         horizontalPosition : 'right'
@@ -53,6 +62,9 @@ export class SigupComponent {
     }
  
     )
+  }
+  public togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
 }

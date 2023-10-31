@@ -36,12 +36,12 @@
       </div>
 </div>
 
-<div class="container">
+<div class="container-sm">
     <div class="row">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th data-field="ID" data-width="100">ID</th>
+                    
                     <th data-field="nane" data-width="50">Company Name </th>
                     <th>Project leader</th>
                     <th>Company</th>
@@ -50,12 +50,12 @@
             </thead>
             <tbody>
                 <tr *ngFor="let enterprise  of enterprises">
-                    <td>{{ enterprise.id }}</td>
+                    
                     <td data-field="nane" data-width="50">{{ enterprise.name }}</td>
                     <td>{{ enterprise.projectLeader }}</td>
                     <td> 
                 <!--     <a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit"><i class="material-icons" data-toggle="tooltip" title="edit Company">edit </i></a>  --> 
-                        <a class="edit"(click)="deleteEnterprise(enterprise)"><i class="material-icons" data-toggle="tooltip" title="edit Company">delete_forever </i></a>
+                        <a class="edit"(click)="deleteEnterprise(enterprise)"><i class="material-icons" data-toggle="tooltip" title="delete Company">delete_forever </i></a>
         
                     </td>
                     <td>

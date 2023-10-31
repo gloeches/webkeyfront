@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit{
   loginStatus:boolean=false;
   private subscription: Subscription = new Subscription;
   private subscriptionStatus: Subscription=new Subscription;
+  public showPassword: boolean = false;
   constructor(private snack:MatSnackBar,private loginService:LoginService,private router:Router,  private data:ExchangeDataService) { }
   ngOnInit(): void {
     this.subscription=this.data.CurrentMessage.subscribe(message => this.message = message)
@@ -49,10 +50,10 @@ export class LoginComponent implements OnInit{
          console.log (userData); 
          this.loginService.setUser (userData);   },
       error: (errorData)=>{
-        console.log("Error from subscribe: ")
+        console.log("Backend can't replay to subcribe: ")
         console.error(errorData);
         this.loginError=errorData;
-        this.snack.open(errorData.error,'Aceptar',{
+        this.snack.open("backend doesn't replay contact administrator",'Aceptar',{
           duration:3000
         })
         this.handleError(errorData);
@@ -79,7 +80,7 @@ export class LoginComponent implements OnInit{
       // The response body may contain clues as to what went wrong.
       console.error(
         `Backend returned code ${error.status}, body was: `, error.error);
-        const errorMessage= 'Backend returned code + '+ error.status + ',body was: ' +error.error;
+        const errorMessage= 'Error Access forbiden check user and password';
         this.snack.open(errorMessage,'Aceptar',{
           duration:5000
         })
@@ -101,4 +102,9 @@ export class LoginComponent implements OnInit{
   goToRegister(){
     this.router.navigateByUrl("/sigup");
   }
+  public togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
 }
+
+

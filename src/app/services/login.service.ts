@@ -13,6 +13,7 @@ export class LoginService {
  public generateToken(loginData:any){
   console.log("entering generateToken function....");
   console.log(`${rootUrl}${authUrl}/signin`);
+  console.log(`login.service (logingData): ${loginData.email}`);
   console.log(loginData);
   
 
