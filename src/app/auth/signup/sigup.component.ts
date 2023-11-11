@@ -21,6 +21,7 @@ export class SigupComponent {
   private baserUrl='http://localhost:8080';
   private loginError:string="";
   public showPassword: boolean = false;
+  public isAgilent:boolean=false;
  
   constructor(private http:HttpClient,private signupService:SignupService,private snack:MatSnackBar, private router:Router) { }
   formSubmit(){
@@ -41,30 +42,52 @@ export class SigupComponent {
       });
       return;
     }
-
-    this.signupService.añadirUsuario(this.user).subscribe({
-      next: (userData) => {
-         console.log(userData);
+    this.signupService.checkAgilent(this.user).subscribe({
+      next: (userData) =>{
+        console.log("checkAgilent next");
+        this.isAgilent=true;
+        this.addUser();
       },
-      error: (errorData)=>{
-        console.error(errorData);
-        this.loginError=errorData;
-        this.snack.open('Forbidden action !!','Ok',{
-          duration : 3000,
-          verticalPosition : 'top',
-          horizontalPosition : 'right'
-        });
+      error: (errorData) =>{
+        console.log("Agilent error")
+        this.isAgilent=false
       },
-      complete: () => {
-        console.info("Signup completo");
-        this.router.navigateByUrl('/');
+      complete:() =>{
+        console.log(`exit check agilent variable isAgilent ${this.isAgilent}`)
       }
-    }
- 
-    )
+    });
+   // if (this.isAgilent==false) return;
+
   }
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
+  public addUser():void{
+    
+      console.log(`entering isAgilen if variable isAgilent ${this.isAgilent}`)
+        this.signupService.añadirUsuario(this.user).subscribe({
+          next: (userData) => {
+            console.log(userData);
+          },
+          error: (errorData)=>{
+            console.error(errorData);
+            this.loginError=errorData;
+            this.snack.open('Forbidden action !!','Ok',{
+              duration : 3000,
+              verticalPosition : 'top',
+              horizontalPosition : 'right'
+            });
+          },
+          complete: () => {
+            console.info("Signup completo");
+            this.router.navigateByUrl('/');
+          }
+        }
+      
+   
+      )
+     }
+     
+  
 }

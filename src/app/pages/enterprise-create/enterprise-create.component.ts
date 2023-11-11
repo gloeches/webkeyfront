@@ -13,7 +13,8 @@ export class EnterpriseCreateComponent {
   enterprise: Enterprise = {
     id: 0,
     name: '',
-    projectLeader: ''
+    projectLeader: '',
+    other_information:''
   };
   constructor(private snack:MatSnackBar,private router:Router,private enterpriseServie:EnterpriseService) { }
   formSubmit(){

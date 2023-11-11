@@ -19,7 +19,11 @@
   
             <mat-form-field class="full-width"  appearance = "outline">
               <mat-label>Project Leader</mat-label>
-              <input required [(ngModel)] = "enterprise.projectLeader" name = "apellido" matInput placeholder="Project Leader">
+              <input required [(ngModel)] = "enterprise.projectLeader" name = "projectLeader" matInput placeholder="Project Leader">
+            </mat-form-field>
+            <mat-form-field class="full-width"  appearance = "outline">
+              <mat-label>Other information</mat-label>
+              <input [(ngModel)] = "enterprise.other_information" name = "otherinformation" matInput placeholder="Other Information">
             </mat-form-field>
                 <div class = "container text-center">
               <button mat-raised-button color="primary">Registrar</button>

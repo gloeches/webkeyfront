@@ -14,4 +14,9 @@ export class SignupService {
     console.log(`${rootUrl}${authUrl}/signup`);
     return this.httpClient.post(`${rootUrl}${authUrl}/signup`,user);
   }
+
+  public checkAgilent(user:any){
+    console.log(`${rootUrl}${authUrl}/agilent/${user.email}`);
+    return this.httpClient.get(`${rootUrl}${authUrl}/agilent/${user.email}`,user);
+  }
 }

@@ -10,14 +10,15 @@
                     <th class="text-center">user</th>
                     <th class="text-center">password</th>
                     <th class="text-center">notes</th>
+                    <th class="text-center">manage keys</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let keypass  of keypasses">
-                    <td>{{ keypass.username }}</td>
-                    <td>{{ keypass.password }}</td>
-                    <td>{{ keypass.notes }}</td>
-                    <td>
+                    <td class="text-center">{{ keypass.username }}</td>
+                    <td class="text-center">{{ keypass.password }}</td>
+                    <td class="text-center">{{ keypass.notes }}</td>
+                    <td class="text-center">
         <!--               <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',keypass.id]" class="btn btn-info">Edit</a>   -->
                     <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',keypass.id]" class="patata"><i class="material-icons" data-toggle="tooltip" title="edit Company">edit </i></a>
                     <a class="delete"(click)="deleteKeypass(keypass)"><i class="material-icons" data-toggle="tooltip" title="Delete Keypass">delete_forever </i></a>

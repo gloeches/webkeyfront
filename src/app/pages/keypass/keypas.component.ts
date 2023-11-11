@@ -16,8 +16,9 @@ export class KeypasComponent implements OnInit{
   id:number=1;
   enterprise: Enterprise = {
     id: 0,
-    name: 'test',
-    projectLeader: ''
+    name: '',
+    projectLeader: '',
+    other_information:''
   };
   keypasses: Keypass []=[];
 
