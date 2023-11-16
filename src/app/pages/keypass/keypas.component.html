@@ -7,9 +7,10 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="text-center">user</th>
-                    <th class="text-center">password</th>
-                    <th class="text-center">notes</th>
+                    <th class="text-center">User</th>
+                    <th class="text-center">Password</th>
+                    <th class="text-center">User Type</th>
+                    <th class="text-center">Notes</th>
                     <th class="text-center">manage keys</th>
                 </tr>
             </thead>
@@ -17,6 +18,7 @@
                 <tr *ngFor="let keypass  of keypasses">
                     <td class="text-center">{{ keypass.username }}</td>
                     <td class="text-center">{{ keypass.password }}</td>
+                    <td class="text-center">{{ keypass.usertype }}</td>
                     <td class="text-center">{{ keypass.notes }}</td>
                     <td class="text-center">
         <!--               <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',keypass.id]" class="btn btn-info">Edit</a>   -->

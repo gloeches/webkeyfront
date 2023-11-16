@@ -6,7 +6,7 @@
             <img src="../../../assets/Sequence_Open_24.svg" width = "100" height = "100">
           </div>
   
-          <h1 class="text-center">Company Id {{ enterpriseId}}</h1>
+          <h1 class="text-center">Company  {{ enterpriseId}}</h1>
           
   
        <form (ngSubmit) = "formSubmit()">    
@@ -21,6 +21,21 @@
               <input  [(ngModel)] = "keypass.password" name = "password" matInput placeholder="password:">
 
             </mat-form-field>
+            <mat-form-field class="full-width"  appearance = "outline">
+              <mat-label>User Type</mat-label>
+              <select matNativeControl [(ngModel)] = "keypass.usertype" name="user_type">
+                <option value="Openlab_Admin">Openlab admin</option>
+                <option value="Shared_Services">Shared Services</option>
+                <option value="Content_Management">Content Management</option>
+                <option value="Windows_Local">Windows Local</option>
+                <option value="DataBase_SA">Database SA</option>
+                <option value="Data_Repository">Data Repository</option>
+                <option value="ACE">ACE</option>
+                <option value="Service">Service</option>
+              </select>
+
+            </mat-form-field>
+            <p>Selected: {{ keypass.usertype }}</p>
             <mat-form-field class="full-width"  appearance = "outline">
                 <mat-label>Notes</mat-label>
                 <input  [(ngModel)] = "keypass.notes" name = "notes" matInput placeholder="notes:">

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogModel, MessagesDialogComponent } from 'src/app/messages/messages-dialog/messages-dialog.component'
+import { ConfirmDialogModel, MessagesDialogComponent } from 'src/app/messages/messages-dialog/messages-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessagesService {
   messages: string[]=[];
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private snack:MatSnackBar) { }
 
   add(message: string){
     this.messages.push(message);
@@ -36,4 +37,14 @@ export class MessagesService {
     else return false;
     
   }
+
+  public ScreeMessage(infoText:string){
+    this.snack.open(infoText,'Ok',{
+      duration : 3000,
+      verticalPosition : 'top',
+      horizontalPosition : 'right'
+    });
+  }
+
+
 }

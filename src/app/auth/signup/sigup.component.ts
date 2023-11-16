@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SignupService } from 'src/app/services/signup.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class SigupComponent {
   public showPassword: boolean = false;
   public isAgilent:boolean=false;
  
-  constructor(private http:HttpClient,private signupService:SignupService,private snack:MatSnackBar, private router:Router) { }
+  constructor(private http:HttpClient,private signupService:SignupService,private snack:MatSnackBar, private router:Router, private message:MessagesService) { }
   formSubmit(){
     console.log(this.user);
     if(this.user.email == '' || this.user.email == null){
@@ -50,6 +51,7 @@ export class SigupComponent {
       },
       error: (errorData) =>{
         console.log("Agilent error")
+        this.message.ScreeMessage("This user is not authorized Please contact administrators");
         this.isAgilent=false
       },
       complete:() =>{

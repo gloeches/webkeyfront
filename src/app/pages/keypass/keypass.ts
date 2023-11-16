@@ -3,4 +3,5 @@ export interface Keypass {
     username:string;
     password:string;
     notes:string;
+    usertype:string;
 }

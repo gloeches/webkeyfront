@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Keypass } from '../keypass/keypass';
 import { KeypassService } from 'src/app/services/keypass.service';
+import {MatSelectModule} from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
   selector: 'app-keypass-create',
@@ -17,10 +19,11 @@ export class KeypassCreateComponent {
     id:0,
     username:'',
     password:'',
-    notes:''
+    notes:'',
+    usertype:''
   }
 
-  constructor(private snack:MatSnackBar,private router:Router,private route: ActivatedRoute,private keypassService:KeypassService) { }
+  constructor(private snack:MatSnackBar,private router:Router,private route: ActivatedRoute,private keypassService:KeypassService, private messageService:MessagesService) { }
   ngOnInit(): void {
     this.enterpriseId=this.route.snapshot.params['id'];
     this.keypassId=this.route.snapshot.params['idk'];
@@ -44,24 +47,24 @@ export class KeypassCreateComponent {
     }
     this.keypassService.addKeypass(this.enterpriseId, this.keypass).subscribe((res:any) => {
       console.log('keypass created successfully: '+ res.username);
+      console.log('user_type: '+ res.user_type);
+      this.messageService.ScreeMessage ('Keys properly inserted !!');
+      if(this.keypassId!=0){
+        this.router.navigateByUrl(`enterprises/${this.enterpriseId}/keypass`);
+      }
+      else{
+  
+      
+      this.keypass.username="another user?";
+      this.keypass.notes='';
+      this.keypass.password='';
+      //  this.router.navigateByUrl('/version');
+      }
+
     })
 
-    this.snack.open('Claves insertadas adecuadamene !!','Aceptar',{
-      duration : 3000,
-      verticalPosition : 'top',
-      horizontalPosition : 'right'
-    });
-    if(this.keypassId!=0){
-      this.router.navigateByUrl(`enterprises/${this.enterpriseId}/keypass`);
-    }
-    else{
-
     
-    this.keypass.username="another user?";
-    this.keypass.notes='';
-    this.keypass.password='';
-    //  this.router.navigateByUrl('/version');
-    }
+    
   }
 
   onBack(){
