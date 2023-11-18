@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogModel, MessagesDialogComponent } from 'src/app/messages/messages-dialog/messages-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,13 @@ export class MessagesService {
     });
   }
 
-
+public SweetMessage(infoText:string){
+  Swal.fire({
+    position: "top-end",
+    icon: "success",
+    title: infoText,
+    showConfirmButton: false,
+    timer: 3000
+  });
+}
 }

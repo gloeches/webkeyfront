@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { ExchangeDataService } from 'src/app/services/exchange-data.service';
 import { Subscription } from 'rxjs';
+import { MessagesService } from 'src/app/services/messages.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit{
   private subscription: Subscription = new Subscription;
   private subscriptionStatus: Subscription=new Subscription;
   public showPassword: boolean = false;
-  constructor(private snack:MatSnackBar,private loginService:LoginService,private router:Router,  private data:ExchangeDataService) { }
+  constructor(private snack:MatSnackBar,private loginService:LoginService,private router:Router,  private data:ExchangeDataService,private infoMessage:MessagesService ) { }
   ngOnInit(): void {
     this.subscription=this.data.CurrentMessage.subscribe(message => this.message = message)
     this.subscriptionStatus=this.data.CurrentStatus.subscribe(status => this.loginStatus=status )
@@ -31,16 +32,11 @@ export class LoginComponent implements OnInit{
 
   formSubmit(){
     if(this.loginData.email.trim() == '' || this.loginData.email.trim() == null){
-      this.snack.open('El nombre de usuario es requerido !!','Aceptar',{
-        duration:3000
-      })
-      return;
+            return;
     }
 
     if(this.loginData.password.trim() == '' || this.loginData.password.trim() == null){
-      this.snack.open('La contraseña es requerida !!','Aceptar',{
-        duration:3000
-      })
+     
       return;
     }
     this.loginService.cleanToken();
@@ -53,9 +49,7 @@ export class LoginComponent implements OnInit{
         console.log("Backend can't replay to subcribe: ")
         console.error(errorData);
         this.loginError=errorData;
-        this.snack.open("backend doesn't replay contact administrator",'Aceptar',{
-          duration:3000
-        })
+        this.infoMessage.SweetMessage("backend doesn't replay contact administrator")
         this.handleError(errorData);
       },
       complete: () => {
@@ -80,10 +74,8 @@ export class LoginComponent implements OnInit{
       // The response body may contain clues as to what went wrong.
       console.error(
         `Backend returned code ${error.status}, body was: `, error.error);
-        const errorMessage= 'Error Access forbiden check user and password';
-        this.snack.open(errorMessage,'Aceptar',{
-          duration:5000
-        })
+        const errorMessage= 'Access error check user and password';
+        this.infoMessage.SweetMessage(errorMessage);
     }
     // Return an observable with a user-facing error message.
     return throwError(() => new Error('Something bad happened; please try again later.'));

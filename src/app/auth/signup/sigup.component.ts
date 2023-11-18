@@ -6,6 +6,7 @@ import { SignupService } from 'src/app/services/signup.service';
 import { MessagesService } from 'src/app/services/messages.service';
 
 
+
 @Component({
   selector: 'app-sigup',
   templateUrl: './sigup.component.html',
@@ -28,19 +29,11 @@ export class SigupComponent {
   formSubmit(){
     console.log(this.user);
     if(this.user.email == '' || this.user.email == null){
-      this.snack.open('Missing Email information !!','Ok',{
-        duration : 3000,
-        verticalPosition : 'top',
-        horizontalPosition : 'right'
-      });
+      
       return;
     }
     if(this.user.password == '' || this.user.password == null){
-      this.snack.open('Missing Password information !!','Ok',{
-        duration : 3000,
-        verticalPosition : 'top',
-        horizontalPosition : 'right'
-      });
+      
       return;
     }
     this.signupService.checkAgilent(this.user).subscribe({
@@ -51,7 +44,7 @@ export class SigupComponent {
       },
       error: (errorData) =>{
         console.log("Agilent error")
-        this.message.ScreeMessage("This user is not authorized Please contact administrators");
+        this.message.SweetMessage("This user is not authorized Please contact administrators");
         this.isAgilent=false
       },
       complete:() =>{
@@ -75,11 +68,7 @@ export class SigupComponent {
           error: (errorData)=>{
             console.error(errorData);
             this.loginError=errorData;
-            this.snack.open('Forbidden action !!','Ok',{
-              duration : 3000,
-              verticalPosition : 'top',
-              horizontalPosition : 'right'
-            });
+            this.message.SweetMessage('Forbidden action !!')
           },
           complete: () => {
             console.info("Signup completo");
