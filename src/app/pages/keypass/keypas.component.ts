@@ -18,7 +18,8 @@ export class KeypasComponent implements OnInit{
     id: 0,
     name: '',
     projectLeader: '',
-    other_information:''
+    other_information:'',
+    filePath:''
   };
   keypasses: Keypass []=[];
 

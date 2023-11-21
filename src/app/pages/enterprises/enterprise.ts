@@ -3,4 +3,5 @@ export interface Enterprise{
     name:string;
     projectLeader:string;
     other_information:string;
+    filePath:string;
 }

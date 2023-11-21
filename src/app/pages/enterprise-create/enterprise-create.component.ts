@@ -14,7 +14,8 @@ export class EnterpriseCreateComponent {
     id: 0,
     name: '',
     projectLeader: '',
-    other_information:''
+    other_information:'',
+    filePath:''
   };
   constructor(private snack:MatSnackBar,private router:Router,private route: ActivatedRoute,private enterpriseServie:EnterpriseService) { }
   ngOnInit(): void {
