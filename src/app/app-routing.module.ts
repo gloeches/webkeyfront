@@ -21,6 +21,7 @@ const routes: Routes = [
   {path: 'version', component: VersionComponent},
   {path: 'main-user', component: MainUserComponent},
   {path: 'enterpriseCreate', component: EnterpriseCreateComponent},
+  {path: 'enterprises/:id',component: EnterpriseCreateComponent},
   {path: 'testformgroup', component: TestFormgroupComponent},
   {path: 'sigup' , component:SigupComponent}
 ];

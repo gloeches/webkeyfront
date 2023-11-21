@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { KeypassService } from 'src/app/services/keypass.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { Observable } from 'rxjs';
+import { saveAs } from 'file-saver';
+import * as FileSaver from 'file-saver';
 
 
 @Component({
@@ -65,12 +67,8 @@ export class EnterprisesComponent {
   downloadFile(id:number):void{
     this.enterpriseService.downloadFile(id)
     .subscribe(blob => {
-      const a = document.createElement('a')
-        const objectUrl = URL.createObjectURL(blob)
-        a.href = objectUrl
-        a.download = 'archive.zip';
-        a.click();
-        URL.revokeObjectURL(objectUrl);
+      filesaver:FileSaver;
+      FileSaver.saveAs(blob,"excel.xlsx")
     });
   }
 

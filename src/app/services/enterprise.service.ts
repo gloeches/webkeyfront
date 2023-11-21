@@ -71,4 +71,10 @@ export class EnterpriseService {
 
     );
   }
+
+  findEnterpriseById(id:number):Observable<Enterprise>{
+    console.log("Enterprise service: findEnterpriseById");
+    const url=`${this.enterpriseUrl}/${id}`;
+    return this.http.get<Enterprise>(url)
+  }
 }
