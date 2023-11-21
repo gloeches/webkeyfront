@@ -51,7 +51,10 @@
             <tbody>
                 <tr *ngFor="let enterprise  of enterprises">
                     
-                    <td data-field="nane" data-width="50">{{ enterprise.name }}</td>
+          <!--          <td data-field="nane" data-width="50">{{ enterprise.name }}</td>   -->
+                    <td>
+                        <a class="edit"(click)="downloadFile(enterprise.id)">{{ enterprise.name }}</a>
+                    </td>
                     <td>{{ enterprise.projectLeader }}</td>
                     <td> 
                 <!--     <a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit"><i class="material-icons" data-toggle="tooltip" title="edit Company">edit </i></a>  --> 
