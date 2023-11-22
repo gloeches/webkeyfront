@@ -17,6 +17,7 @@ export class EnterpriseCreateComponent {
     other_information:'',
     filePath:''
   };
+  fileName='';
   constructor(private snack:MatSnackBar,private router:Router,private route: ActivatedRoute,private enterpriseServie:EnterpriseService) { }
   ngOnInit(): void {
     this.enterprise.id=this.route.snapshot.params['id'];
@@ -62,6 +63,26 @@ export class EnterpriseCreateComponent {
 
     })
     
+  }
+  onFileSelected(event:any){
+    console.log("Enterprise-create componente: onFileSelected ")
+    const file:File = event.target.files[0];
+    if (file){
+      this.fileName=file.name;
+      const formData=new FormData();
+      formData.append("image",file);
+      this.enterpriseServie.uploadFile(this.enterprise.id, formData).subscribe({
+        next: (_enterprise:Enterprise) => {
+        console.log(`Enterprise-create comp onFileSelect id:  ${_enterprise.name}`)
+        },
+      
+        error: (errorData)=>{
+          console.log(`Enterprise-create comp onFileSelect error: ${errorData}`)
+        } 
+      })
+
+
+    }
   }
 
 }

@@ -72,6 +72,14 @@ export class EnterpriseService {
     );
   }
 
+  public uploadFile(id:number,formData:FormData): Observable<any>{
+    const url=`${this.enterpriseUrl}/${id}/filesystem`;
+    console.log(`from enterprise.uploadFile url ${url}`)
+    return this.http.post(url,formData).pipe(
+      tap(_ => console.log (`from enterprise.upload pipe url ${url}`))
+    );
+  }
+
   findEnterpriseById(id:number):Observable<Enterprise>{
     console.log("Enterprise service: findEnterpriseById");
     const url=`${this.enterpriseUrl}/${id}`;
