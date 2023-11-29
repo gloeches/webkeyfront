@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 })
 export class MessagesService {
   messages: string[]=[];
+  question: boolean=false;
   constructor(public dialog: MatDialog, private snack:MatSnackBar) { }
 
   add(message: string){
@@ -55,5 +56,24 @@ public SweetMessage(infoText:string){
     showConfirmButton: false,
     timer: 3000
   });
+}
+public SweetQuestion(infoText:string): boolean{
+  Swal.fire({
+    title: infoText,
+    showDenyButton: true,
+    showCancelButton: false,
+    confirmButtonText: "Yes",
+    denyButtonText: `No`
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      console.log("message.service selected Yes")
+      this.question=true;
+    } else  {
+      console.log("message.service selected No")
+      this.question=false;
+    }
+  });
+  return this.question;
 }
 }

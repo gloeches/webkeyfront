@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { KeypassService } from 'src/app/services/keypass.service';
 import { EnterpriseService } from 'src/app/services/enterprise.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-keypas',
@@ -47,14 +48,24 @@ export class KeypasComponent implements OnInit{
     let testMessagesService:MessagesService;
     console.log("click delete keypass ");
 //    console.log(this.confirmation.confirmDialog('a'))
-    const result=confirm(`Do you really want to delete ${keypass.username} key?` );
-    if (result) {
-      this.keypasses=this.keypasses.filter(h=>h!==keypass);
-      this.keypassService.deleteKeypass(keypass.id).subscribe();
-      console.log(`user confirmed to delete ${keypass.username} company `);
-    }
-    else {
-      console.log(`user has decided to cancel de deletion ${keypass.username}`)
-    }
+//    const result=confirm(`Do you really want to delete ${keypass.username} key?` );
+    Swal.fire({
+      title: `Do you really want to delete ${keypass.username} User Key?`,
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Yes",
+      denyButtonText: `No`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.keypasses=this.keypasses.filter(h=>h!==keypass);
+        this.keypassService.deleteKeypass(keypass.id).subscribe();
+        console.log(`user confirmed to delete ${keypass.username} User key? `);
+        
+      } else  {
+        console.log(`user has decided to cancel de deletion ${keypass.username}`)
+      }
+    });
   }
+    
 } 

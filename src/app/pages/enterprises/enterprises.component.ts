@@ -8,6 +8,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 import { Observable } from 'rxjs';
 import { saveAs } from 'file-saver';
 import * as FileSaver from 'file-saver';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -46,23 +47,32 @@ export class EnterprisesComponent {
   }
   createEnterprise():void{
     this.router.navigateByUrl('/enterpriseCreate');
+   
   }
 
   deleteEnterprise(enterprise:Enterprise):void{
     let testMessagesService:MessagesService;
     console.log("click delete enterprise ");
 //    console.log(this.confirmation.confirmDialog('a'))
-    const result=confirm(`Do you really want to delete ${enterprise.name} company?` );
-    if (result) {
-      this.enterprises=this.enterprises.filter(h=>h!==enterprise);
-      this.enterpriseService.deleteEnterprise(enterprise.id).subscribe();
-      this._enterprise=enterprise;
-      console.log(`user confirmed to delete ${enterprise.name} company `);
-    }
-    else {
-      console.log(`user has decided to cancel de deletion ${enterprise.name}`)
-    }
-    
+//    const result=confirm(`Do you really want to delete ${enterprise.name} company?` );
+    Swal.fire({
+      title: `Do you really want to delete ${enterprise.name} company?`,
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Yes",
+      denyButtonText: `No`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.enterprises=this.enterprises.filter(h=>h!==enterprise);
+        this.enterpriseService.deleteEnterprise(enterprise.id).subscribe();
+        this._enterprise=enterprise;
+        console.log(`user confirmed to delete ${enterprise.name} company `);
+        
+      } else  {
+        console.log(`user has decided to cancel de deletion ${enterprise.name}`)
+      }
+    });
   }
   downloadFile(id:number):void{
     this.enterpriseService.downloadFile(id)

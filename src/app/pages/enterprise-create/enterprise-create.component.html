@@ -28,13 +28,14 @@
               <mat-label>Other information</mat-label>
               <input [(ngModel)] = "enterprise.other_information" name = "otherinformation" matInput placeholder="Other Information">
             </mat-form-field>
-            <mat-form-field class="full-width"  appearance = "outline">
+<!--            <mat-form-field class="full-width"  appearance = "outline">
               <mat-label>file path</mat-label>
-              <input [(ngModel)] = "enterprise.filePath" name = "filePath" matInput placeholder="file Path" readonly>
+              <input type="hidden" [(ngModel)] = "enterprise.filePath" name = "filePath" matInput placeholder="file Path" readonly>
             </mat-form-field>
+-->
             <div class="file-upload">
 
-              {{fileName || enterprise.filePath}}
+              upload file: {{fileName || enterprise.filePath}}
 
               
             </div>

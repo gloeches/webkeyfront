@@ -18,9 +18,11 @@ export class EnterpriseCreateComponent {
     filePath:''
   };
   fileName='';
+  formData=new FormData();
   constructor(private snack:MatSnackBar,private router:Router,private route: ActivatedRoute,private enterpriseServie:EnterpriseService) { }
   ngOnInit(): void {
     this.enterprise.id=this.route.snapshot.params['id'];
+    if (!this.enterprise.id) this.enterprise.id=0;
     console.log('Enterprise-create component: OnInit params: ', this.enterprise.id );
     if (this.enterprise.id!=0) {
       this.enterpriseServie.findEnterpriseById(this.enterprise.id).subscribe(_enterprise => this.enterprise = _enterprise)
@@ -42,7 +44,7 @@ export class EnterpriseCreateComponent {
     //console.log('Enterprise created successfully: '+ res.name);
     //})
     this.enterpriseServie.addEnterprise(this.enterprise).subscribe({
-      next: (_enterprise:any)=>{
+      next: (_enterprise:any)=>{this.enterprise.id=_enterprise.id
         
         console.log('Enterprise created successfully: '+ _enterprise.name)
         this.snack.open('Enterprise inserted properly !!','Ok',{
@@ -57,7 +59,19 @@ export class EnterpriseCreateComponent {
       complete: ( )=>{
         
         console.info("created enterprise process completed")
+        if (this.formData.has("image")){
+
         
+          this.enterpriseServie.uploadFile(this.enterprise.id, this.formData).subscribe({
+            next: (_enterprise:Enterprise) => {
+            console.log(`Enterprise-create comp onFileSelect id:  ${_enterprise.name}`)
+            },
+          
+            error: (errorData)=>{
+              console.log(`Enterprise-create comp onFileSelect error: ${errorData}`)
+            } 
+          })
+        }
         this.router.navigateByUrl('/enterprises');
       }
 
@@ -69,9 +83,9 @@ export class EnterpriseCreateComponent {
     const file:File = event.target.files[0];
     if (file){
       this.fileName=file.name;
-      const formData=new FormData();
-      formData.append("image",file);
-      this.enterpriseServie.uploadFile(this.enterprise.id, formData).subscribe({
+ //     const formData=new FormData();
+      this.formData.append("image",file);
+ /*     this.enterpriseServie.uploadFile(this.enterprise.id, this.formData).subscribe({
         next: (_enterprise:Enterprise) => {
         console.log(`Enterprise-create comp onFileSelect id:  ${_enterprise.name}`)
         },
@@ -80,7 +94,7 @@ export class EnterpriseCreateComponent {
           console.log(`Enterprise-create comp onFileSelect error: ${errorData}`)
         } 
       })
-
+*/
 
     }
   }

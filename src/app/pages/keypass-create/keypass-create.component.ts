@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MessagesService } from 'src/app/services/messages.service';
+import {Observable} from 'rxjs'
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-keypass-create',
@@ -15,6 +17,8 @@ import { MessagesService } from 'src/app/services/messages.service';
 export class KeypassCreateComponent {
   public enterpriseId:number=0;
   public keypassId:number=0;
+  public enterpriseName!: Observable<string>;
+  public enterpriseNameString: string='';
   public keypass:Keypass={
     id:0,
     username:'',
@@ -27,6 +31,13 @@ export class KeypassCreateComponent {
   ngOnInit(): void {
     this.enterpriseId=this.route.snapshot.params['id'];
     this.keypassId=this.route.snapshot.params['idk'];
+    this.enterpriseName=this.route.queryParams
+      .pipe(map(p => p['enterpriseName']))
+    this.enterpriseName.subscribe(parametro => this.enterpriseNameString=parametro)
+    console.log("params: "+ this.enterpriseNameString);
+    
+
+      
     console.log('keypass component: OnInit params: ', this.enterpriseId ,' selected:',this.keypassId);
     if (this.keypassId!=0) {
       this.keypassService.findKeypassById(this.keypassId).subscribe(_keypass => this.keypass = _keypass)

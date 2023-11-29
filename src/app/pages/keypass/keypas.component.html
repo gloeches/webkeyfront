@@ -22,7 +22,10 @@
                     <td class="text-center">{{ keypass.notes }}</td>
                     <td class="text-center">
         <!--               <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',keypass.id]" class="btn btn-info">Edit</a>   -->
-                    <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',keypass.id]" class="patata"><i class="material-icons" data-toggle="tooltip" title="edit Company">edit </i></a>
+                    <a href="#" [routerLink]="['/enterprises/',enterprise.id,'createkeypass',keypass.id]"
+                        [queryParams]="{enterpriseName: enterprise.name}">
+                        <i class="material-icons" data-toggle="tooltip" title="edit Key">edit </i>
+                    </a>
                     <a class="delete"(click)="deleteKeypass(keypass)"><i class="material-icons" data-toggle="tooltip" title="Delete Keypass">delete_forever </i></a>
                     </td>
                 </tr>
