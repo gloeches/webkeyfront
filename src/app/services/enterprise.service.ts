@@ -63,7 +63,7 @@ export class EnterpriseService {
     );
 
   }
-  public downloadFile(id:number): Observable<any>{
+  public downloadFile(id:number,filename:string): Observable<any>{
     const url=`${this.enterpriseUrl}/${id}/filesystem`;
     console.log(`from enterprise.downloadFile url ${url}`)
     return this.http.get(url,{responseType: 'blob'}).pipe(

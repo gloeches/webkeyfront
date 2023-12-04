@@ -42,10 +42,11 @@
             <thead>
                 <tr>
                     
-                    <th data-field="nane" data-width="50">Company Name </th>
-                    <th>Project leader</th>
-                    <th>Company</th>
-                    <th>Keypass</th>
+                    <th data-field="nane" data-width="50" class="text-center">Company Name </th>
+                    <th class="text-center">Project leader</th>
+                    <th class="text-center">File</th>
+                    <th class="text-center">Company</th>
+                    <th class="text-center">Keypass</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,8 +60,11 @@
                     <td>
                         <a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit">{{ enterprise.name }}</a>
                     </td>
-                    <td>{{ enterprise.projectLeader }}</td>
-                    <td> 
+                    <td class="text-center">{{ enterprise.projectLeader }}</td>
+                    <td class="text-center">
+                        <a class="edit"(click)="downloadFile(enterprise.id,enterprise.filePath)" *ngIf="enterprise.filePath"><i class="material-icons" data-toggle="tooltip" title="delete Company">file_download </i></a>
+                    </td>
+                    <td class="text-center"> 
                 <!--     <a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit"><i class="material-icons" data-toggle="tooltip" title="edit Company">edit </i></a>  --> 
                         <a class="edit"(click)="deleteEnterprise(enterprise)"><i class="material-icons" data-toggle="tooltip" title="delete Company">delete_forever </i></a>
         

@@ -74,11 +74,11 @@ export class EnterprisesComponent {
       }
     });
   }
-  downloadFile(id:number):void{
-    this.enterpriseService.downloadFile(id)
+  downloadFile(id:number,filename:string):void{
+    this.enterpriseService.downloadFile(id,filename)
     .subscribe(blob => {
       filesaver:FileSaver;
-      FileSaver.saveAs(blob,"excel.xlsx")
+      FileSaver.saveAs(blob,filename)
     });
   }
 
