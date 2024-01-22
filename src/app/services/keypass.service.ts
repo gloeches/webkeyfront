@@ -49,7 +49,7 @@ httpOptions={
     )
   }
   public deleteKeypass(id:number):Observable<Keypass>{
-    this.fullApiURL=`${this.apiURL}/keypass/${id}`;
+    this.fullApiURL=`${this.apiURL}/admin/keypass/${id}`;
     console.log(`deleteKeypass url: ${this.fullApiURL}`);
     return this.httpCliente.delete<Keypass>(this.fullApiURL).pipe(
       tap(_=>console.log(`deleted keypass id=${id}`))

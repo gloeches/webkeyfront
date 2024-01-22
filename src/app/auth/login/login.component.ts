@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit{
   private subscription: Subscription = new Subscription;
   private subscriptionStatus: Subscription=new Subscription;
   public showPassword: boolean = false;
-  constructor(private snack:MatSnackBar,private loginService:LoginService,private router:Router,  private data:ExchangeDataService,private infoMessage:MessagesService ) { }
+  constructor(private notifica:MessagesService,private loginService:LoginService,private router:Router,  private data:ExchangeDataService,private infoMessage:MessagesService ) { }
   ngOnInit(): void {
     this.subscription=this.data.CurrentMessage.subscribe(message => this.message = message)
     this.subscriptionStatus=this.data.CurrentStatus.subscribe(status => this.loginStatus=status )
@@ -96,6 +96,13 @@ export class LoginComponent implements OnInit{
   }
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+  ResetPassword(){
+    if(this.loginData.email.trim() == '' || this.loginData.email.trim() == null){
+      return;
+    }
+    this.notifica.SweetMessage(`Check your Email: ${this.loginData.email} for Reset password notification`);
+    this.loginService.resetPassword(this.loginData.email).subscribe();
   }
 }
 

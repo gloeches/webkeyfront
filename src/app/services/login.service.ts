@@ -2,13 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { rootUrl } from 'src/app/shared/header/constants';
 import { authUrl }  from 'src/app/shared/header/constants';
+import { EmailModel } from '../model/email-model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  
-  constructor(private http:HttpClient) { }
+    public mailData: EmailModel;
+  constructor(private http:HttpClient) { 
+    this.mailData= new EmailModel();
+  }
  //generamos el token
  public generateToken(loginData:any){
   console.log("entering generateToken function....");
@@ -19,6 +22,9 @@ export class LoginService {
 
   return this.http.post(`${rootUrl}${authUrl}/signin` ,loginData);
 
+}
+public resetPassword(emailAddress:string){
+  return this.http.post(`${rootUrl}${authUrl}/send/${emailAddress}`,this.mailData);
 }
 
   //obtenemos el token

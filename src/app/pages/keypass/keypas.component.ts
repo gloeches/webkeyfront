@@ -29,6 +29,7 @@ export class KeypasComponent implements OnInit{
     private router: Router,
     private keypassService: KeypassService,
     private enterpriseService: EnterpriseService,
+    private message:MessagesService
     ){ }
   ngOnInit(): void {
     this.id=this.route.snapshot.params['id'];
@@ -59,8 +60,17 @@ export class KeypasComponent implements OnInit{
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         this.keypasses=this.keypasses.filter(h=>h!==keypass);
-        this.keypassService.deleteKeypass(keypass.id).subscribe();
         console.log(`user confirmed to delete ${keypass.username} User key? `);
+        this.keypassService.deleteKeypass(keypass.id).subscribe({
+          next: ()=>{console.log("keypass deleted ")},
+          error:(errorData)=>{
+            console.log("keypass deny access");
+            this.message.SweetMessage("this user is not authorized to do this action")
+          }
+        }
+
+        );
+        
         
       } else  {
         console.log(`user has decided to cancel de deletion ${keypass.username}`)

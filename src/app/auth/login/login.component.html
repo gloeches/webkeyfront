@@ -23,12 +23,15 @@
               <mat-hint>La contraseña debe ser valida</mat-hint>
             </mat-form-field>
 
-            <br><br>
-
+           
+            <div class ="container text-left">
+              <button type="button" class="btn btn-link" Reset Password (click)="ResetPassword()">Reset Password</button>
+            </div>
             <div class = "container text-center">
               <button type = "submit" mat-raised-button color="primary">Login</button>
               <button type="reset" style = "margin-left: 20px;" mat-raised-button color="primary">Clear</button>
               <button type="button" style = "margin-left: 20px;" mat-raised-button color="primary" (click)="goToRegister()" clickable>Register</button>
+              
  <!--            <button type="button" (myClick)="enviaMensaje()" clickable>pulsar</button>
               <button type="button" (click)="enviaMensaje()"></button>   -->
             </div>
