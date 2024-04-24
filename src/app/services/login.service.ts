@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { rootUrl } from 'src/app/shared/header/constants';
 import { authUrl }  from 'src/app/shared/header/constants';
+import { emailUrl }  from 'src/app/shared/header/constants';
 import { EmailModel } from '../model/email-model';
 
 @Injectable({
@@ -24,7 +25,7 @@ export class LoginService {
 
 }
 public resetPassword(emailAddress:string){
-  return this.http.post(`${rootUrl}${authUrl}/send/${emailAddress}`,this.mailData);
+  return this.http.post(`${emailUrl}/htmlemail/${emailAddress}`,this.mailData);
 }
 
   //obtenemos el token

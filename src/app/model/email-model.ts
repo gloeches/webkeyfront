@@ -3,7 +3,7 @@ export class EmailModel {
     public message: string;
 
      constructor(){
-        this.subject="Testing from Poseidon";
+        this.subject="Email notification from Poseidon";
         this.message="Testing Email message";
      }
 }
