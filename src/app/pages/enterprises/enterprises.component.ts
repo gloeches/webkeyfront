@@ -5,10 +5,11 @@ import { EnterpriseService } from '../../services/enterprise.service';
 import { Router } from '@angular/router';
 import { KeypassService } from 'src/app/services/keypass.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
 import * as FileSaver from 'file-saver';
 import Swal from 'sweetalert2';
+import { ExchangeDataService } from  '../../services/exchange-data.service';
 
 
 @Component({
@@ -17,9 +18,11 @@ import Swal from 'sweetalert2';
   styleUrls: ['./enterprises.component.css']
 })
 export class EnterprisesComponent {
-  
+  isLoggedIn: Boolean=false;
+  message:string="";
+  subcription: Subscription = new Subscription;
   enterprises: Enterprise[]=[];
-  constructor(private router: Router,private enterpriseService: EnterpriseService, private keypassService:KeypassService,private confirmation:MessagesService){}
+  constructor(private router: Router,private enterpriseService: EnterpriseService, private keypassService:KeypassService,private confirmation:MessagesService,private data:ExchangeDataService){}
   selectedEnterprise?: Enterprise;
   _enterprise?:Enterprise;
 
@@ -27,6 +30,8 @@ export class EnterprisesComponent {
     this.getEnterprises();
     console.log('inicializando');
  //   this.getLogin();
+    this.subcription=this.data.CurrentMessage.subscribe(message => this.message=message);
+    this.subcription=this.data.CurrentStatus.subscribe(status=>this.isLoggedIn=status);
     
   }
   onSelect(enterprise: Enterprise):void {

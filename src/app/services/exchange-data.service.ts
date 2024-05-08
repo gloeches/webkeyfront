@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class ExchangeDataService {
   private loginStatus=new BehaviorSubject<boolean>(false);
-  private messageSubject = new BehaviorSubject<string>("cadena inicializada");
+  private messageSubject = new BehaviorSubject<string>("");
   CurrentMessage: Observable<string> = this.messageSubject;
   CurrentStatus: Observable<boolean>=this.loginStatus;
 

@@ -8,6 +8,7 @@ import { throwError } from 'rxjs/internal/observable/throwError';
 import { ExchangeDataService } from 'src/app/services/exchange-data.service';
 import { Subscription } from 'rxjs';
 import { MessagesService } from 'src/app/services/messages.service';
+import { RoleService } from 'src/app/services/role.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit{
   private subscription: Subscription = new Subscription;
   private subscriptionStatus: Subscription=new Subscription;
   public showPassword: boolean = false;
-  constructor(private notifica:MessagesService,private loginService:LoginService,private router:Router,  private data:ExchangeDataService,private infoMessage:MessagesService ) { }
+  constructor(private notifica:MessagesService,private loginService:LoginService,private router:Router,  private data:ExchangeDataService,private infoMessage:MessagesService, private role:RoleService ) { }
   ngOnInit(): void {
     this.subscription=this.data.CurrentMessage.subscribe(message => this.message = message)
     this.subscriptionStatus=this.data.CurrentStatus.subscribe(status => this.loginStatus=status )
@@ -82,11 +83,27 @@ export class LoginComponent implements OnInit{
   }
 
   enviaMensaje(){
-    console.log("enviado mensaje");
-    this.data.changeMessage("Enviado Mensaje");
-
-
+    this.role.getRole().subscribe({
+    next: (userData) => {
+      console.log('userData from subscribe of role:');
+      console.log (userData.role);
+      this.data.changeMessage(userData.role);
+    },
+   error: (errorData)=>{
+     console.log("Backend can't replay to subcribe: ")
+     console.error(errorData);
+     this.loginError=errorData;
+     this.infoMessage.SweetMessage("backend doesn't replay contact administrator")
+     this.handleError(errorData);
+   },
+   complete: () => {
+     console.info("Envia mensaje completado");
+    
+   }
   }
+)
+   
+}
   changeStatus(status:boolean){
     console.log("change login status to "+status);
     this.data.changeStatus(status);

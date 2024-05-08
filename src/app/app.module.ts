@@ -31,6 +31,8 @@ import { SubmitResetComponent } from './dev/submit-reset/submit-reset.component'
 import {MatDialogModule} from '@angular/material/dialog';
 import { MessagesDialogComponent } from './messages/messages-dialog/messages-dialog.component';
 import { HomeComponent } from './pages/home/home.component';
+import { RoleComponent } from './pages/role/role/role.component';
+
 
 
 @NgModule({
@@ -50,7 +52,9 @@ import { HomeComponent } from './pages/home/home.component';
     TestFormgroupComponent,
     MessagesDialogComponent,
     SubmitResetComponent,
-    HomeComponent
+    HomeComponent,
+    RoleComponent
+  
   ],
   imports: [
     BrowserModule,

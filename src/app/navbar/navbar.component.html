@@ -22,6 +22,9 @@
         <li *ngIf="isLoggedIn" class="nav-item">
           <a class="nav-link" [routerLink]="'/enterprises'">Enterprises</a>
         </li>
+        <li class="nav-item text-end">
+          <a class="nav-link text-end">{{ message }}</a>
+        </li>
  <!--       <li class="nav-item">
           <a class="nav-link" [routerLink]="'/testformgroup'">TestFormgroup</a>
         </li>
@@ -39,6 +42,9 @@
       <ul class="navbar-nav">
         <li class="nav-item text-end">
           <a class="nav-link text-end" [routerLink]="'/version'"routerLinkActive="active-link">Version</a>
+        </li>
+        <li class="nav-item text-end">
+          <a class="nav-link text-end">{{ message }}</a>
         </li>
       </ul>
     </div>
