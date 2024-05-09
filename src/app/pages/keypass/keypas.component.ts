@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 
 export class KeypasComponent implements OnInit{
   id:number=1;
+  _role:string='';
   enterprise: Enterprise = {
     id: 0,
     name: '',
@@ -33,12 +34,26 @@ export class KeypasComponent implements OnInit{
     ){ }
   ngOnInit(): void {
     this.id=this.route.snapshot.params['id'];
+    this._role=this.route.snapshot.params['message'];
     console.log('keypass component: OnInit params: ', this.id ,' selected');
     this.getEnterpriseById();
-    this.getKeypasses();
+    if (this._role=='ADMIN') {
+      console.log('Admin Layout');
+      this.getKeypasses();
+    }
+    else {
+        console.log('USER layout');
+        this.getLimitedKeypasses();
+    }
   }
   getKeypasses(): void {
+    console.log('entering getKeypasses function');
     this.keypassService.findAllKeypassByEnterpriseId(this.id).subscribe(keypasses => this.keypasses = keypasses);
+  }
+
+  getLimitedKeypasses(): void {
+    console.log('entering getLimitedKeypasses function');
+    this.keypassService.findLimitedKeypassByEnterpriseId(this.id).subscribe(keypasses => this.keypasses = keypasses);
   }
   getEnterpriseById(): void{
     this.enterpriseService.getEnterpriseById(this.id).subscribe(_enterprise => this.enterprise = _enterprise);

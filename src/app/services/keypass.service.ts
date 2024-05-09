@@ -38,10 +38,14 @@ httpOptions={
      this.fullApiURL=this.apiURL+'/enterprises/'+id+'/keypass'
     console.log(this.fullApiURL)
     return this.httpCliente.get<Keypass[]>(this.apiURL+'/enterprises/'+id+'/keypass')
-     
-    
   }
 
+  findLimitedKeypassByEnterpriseId(id:number):Observable<Keypass[]>{
+    console.log ('findLimitedKeypassByEnterpriseId collecting data');
+     this.fullApiURL=this.apiURL+'/enterprises/'+id+'/limitedkeypass'
+    console.log(this.fullApiURL)
+    return this.httpCliente.get<Keypass[]>(this.apiURL+'/enterprises/'+id+'/limitedkeypass')
+  }
   addKeypass(id:number,keypass:Keypass):Observable<Keypass>{
     return this.httpCliente.post<Keypass>(this.apiURL+'/enterprises/'+id+'/keypass', keypass).pipe(
       tap((_keypass: Keypass)=> this.log(`added hero w/ id={_keypass.id}`)),

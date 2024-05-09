@@ -15,7 +15,7 @@ const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'enterprises', component: EnterprisesComponent},
-  {path: 'enterprises/:id/keypass', component: KeypasComponent},
+  {path: 'enterprises/:id/keypass/:message', component: KeypasComponent},
   {path: 'enterprises/:id/createkeypass/:idk', component: KeypassCreateComponent},
   {path: 'logout', component: LoginComponent},
   {path: 'version', component: VersionComponent},
