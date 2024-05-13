@@ -4,6 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnterpriseService } from 'src/app/services/enterprise.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { ExchangeDataService } from 'src/app/services/exchange-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-enterprise-create',
@@ -19,8 +21,10 @@ export class EnterpriseCreateComponent {
     filePath:''
   };
   fileName='';
+  subcription: Subscription = new Subscription;
+  role:String ='';
   formData=new FormData();
-  constructor(private message:MessagesService,private router:Router,private route: ActivatedRoute,private enterpriseServie:EnterpriseService) { }
+  constructor(private message:MessagesService,private router:Router,private route: ActivatedRoute,private enterpriseServie:EnterpriseService,private data:ExchangeDataService) { }
   ngOnInit(): void {
     this.enterprise.id=this.route.snapshot.params['id'];
     if (!this.enterprise.id) this.enterprise.id=0;
@@ -29,6 +33,7 @@ export class EnterpriseCreateComponent {
       this.enterpriseServie.findEnterpriseById(this.enterprise.id).subscribe(_enterprise => this.enterprise = _enterprise)
       console.log("enterprise-create in edit mode: ");
     }
+    this.subcription=this.data.CurrentMessage.subscribe(message => this.role=message);
   }
   formSubmit(){
     console.log("click formSubmit ")

@@ -62,7 +62,7 @@
                     </td>
                     <td class="text-center">{{ enterprise.projectLeader }}</td>
                     <td class="text-center">
-                        <a class="edit"(click)="downloadFile(enterprise.id,enterprise.filePath)" *ngIf="enterprise.filePath"><i class="material-icons" data-toggle="tooltip" title="Download File">file_download </i></a>
+                        <a class="edit"(click)="downloadFile(enterprise.id,enterprise.filePath)" *ngIf="enterprise.filePath && message=='ADMIN'"><i class="material-icons" data-toggle="tooltip" title="Download File">file_download </i></a>
                     </td>
                     <td class="text-center"> 
                 <!--     <a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit"><i class="material-icons" data-toggle="tooltip" title="edit Company">edit </i></a>  --> 

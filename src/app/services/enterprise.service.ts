@@ -14,6 +14,7 @@ import { authUrl }  from 'src/app/shared/header/constants';
 })
 export class EnterpriseService {
   private enterpriseUrl=`${rootUrl}${apiUrl}/enterprise`;
+  private enterpriseAdminUrl=`${rootUrl}${apiUrl}/admin/enterprise`;
   private enterprisesUrl=`${rootUrl}${apiUrl}/enterprises`;
   httpOptions={
     headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -57,7 +58,7 @@ export class EnterpriseService {
     return this.http.post(`${this.enterpriseUrl}`,enterprise);
   }
   public deleteEnterprise(id:number):Observable<Enterprise>{
-    const url=`${this.enterpriseUrl}/${id}`;
+    const url=`${this.enterpriseAdminUrl}/${id}`;
     return this.http.delete<Enterprise>(url,this.httpOptions).pipe(
       tap(_ => console.log (`deleted enterprise id=${id}`))
     );

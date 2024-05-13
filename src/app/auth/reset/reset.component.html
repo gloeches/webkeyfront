@@ -1,0 +1,48 @@
+<div class = "bootstrap-wrapper">
+    <div class = "container">
+      <div class = "row" style = "margin-top : 20px;">
+        <div class = "col-md-6 offset-md-3">
+          <div class="container text-center">
+            <img src="../../../assets/Sequence_Open_24.svg" width = "100" height = "100">
+          </div>
+  
+          <h1 class="text-center">Registrate aqui</h1>
+  
+  
+          <form (ngSubmit) = "formSubmit()">
+
+  
+            <mat-form-field class="full-width"  appearance = "outline">
+              <mat-label>Email</mat-label>
+              <input required [(ngModel)] = "user.email" name = "email" type="email" matInput placeholder="Enter your Email">
+            </mat-form-field>
+
+            <mat-form-field class="full-width"  appearance = "outline">
+              <mat-label>Password</mat-label>
+              <input  required [(ngModel)] = "user.password" matInput [type]="showPassword ? 'text' : 'password'" name="password" placeholder="Enter your password">
+              <mat-icon matSuffix (click)="togglePasswordVisibility()" name = "password1">
+                {{showPassword?'visibility_off':'visibility'}}
+            </mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width"  appearance = "outline">
+                <mat-label>Confirm Password</mat-label>
+                <input  required [(ngModel)] = "user.passwordConfirm" matInput [type]="showPassword ? 'text' : 'password'" name="password2" placeholder="Enter your password">
+                <mat-icon matSuffix (click)="togglePasswordVisibility()" name = "password2">
+                  {{showPassword?'visibility_off':'visibility'}}
+              </mat-icon>
+              </mat-form-field>
+              <div class ="container text-left" style="color:red;">
+                {{errorMessage}}
+              </div>
+             <div class = "container text-center">
+              <button mat-raised-button color="primary">Register</button>
+              <button type="reset" style = "margin-left: 20px;" mat-raised-button color="accent">Clear</button>
+            </div>
+            
+          </form>
+          <br><br><br>
+        </div>
+      </div>
+    </div>
+  </div>
+  

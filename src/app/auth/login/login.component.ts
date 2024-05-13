@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit{
   ngOnInit(): void {
     this.subscription=this.data.CurrentMessage.subscribe(message => this.message = message)
     this.subscriptionStatus=this.data.CurrentStatus.subscribe(status => this.loginStatus=status )
+    this.changeStatus(false);
   }
 
   formSubmit(){

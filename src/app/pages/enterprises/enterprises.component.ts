@@ -69,10 +69,21 @@ export class EnterprisesComponent {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        this.enterprises=this.enterprises.filter(h=>h!==enterprise);
-        this.enterpriseService.deleteEnterprise(enterprise.id).subscribe();
-        this._enterprise=enterprise;
+        
         console.log(`user confirmed to delete ${enterprise.name} company `);
+        this.enterpriseService.deleteEnterprise(enterprise.id).subscribe({
+          next: ()=>{
+            console.log(`succesfull deletion ${enterprise.name} company `);
+            this.enterprises=this.enterprises.filter(h=>h!==enterprise);
+          },
+          error:(errorData)=>{
+            console.log("Backend deny access");
+            
+            this.confirmation.SweetMessage("this user is not authorized to do this action")
+          }
+        });
+        this._enterprise=enterprise;
+        
         
       } else  {
         console.log(`user has decided to cancel de deletion ${enterprise.name}`)

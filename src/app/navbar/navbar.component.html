@@ -22,8 +22,11 @@
         <li *ngIf="isLoggedIn" class="nav-item">
           <a class="nav-link" [routerLink]="'/enterprises'">Enterprises</a>
         </li>
+        <li *ngIf="isLoggedIn" class="nav-item">
+          <a class="nav-link" [routerLink]="'/login'">logout</a>
+        </li>
         <li class="nav-item text-end">
-          <a class="nav-link text-end">{{ message }}</a>
+          <a class="nav-link text-end disabled">{{ message }}</a>
         </li>
  <!--       <li class="nav-item">
           <a class="nav-link" [routerLink]="'/testformgroup'">TestFormgroup</a>
@@ -43,9 +46,7 @@
         <li class="nav-item text-end">
           <a class="nav-link text-end" [routerLink]="'/version'"routerLinkActive="active-link">Version</a>
         </li>
-        <li class="nav-item text-end">
-          <a class="nav-link text-end">{{ message }}</a>
-        </li>
+        
       </ul>
     </div>
 

@@ -10,6 +10,8 @@ import { EnterpriseCreateComponent } from './pages/enterprise-create/enterprise-
 import { KeypassCreateComponent } from './pages/keypass-create/keypass-create.component';
 import { TestFormgroupComponent } from './dev/test-formgroup/test-formgroup.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ResetComponent } from './auth/reset/reset.component';
+
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -23,7 +25,8 @@ const routes: Routes = [
   {path: 'enterpriseCreate', component: EnterpriseCreateComponent},
   {path: 'enterprises/:id',component: EnterpriseCreateComponent},
   {path: 'testformgroup', component: TestFormgroupComponent},
-  {path: 'sigup' , component:SigupComponent}
+  {path: 'sigup' , component:SigupComponent},
+  {path: 'reset' , component:ResetComponent}
 ];
 
 @NgModule({

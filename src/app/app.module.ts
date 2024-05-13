@@ -32,6 +32,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { MessagesDialogComponent } from './messages/messages-dialog/messages-dialog.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RoleComponent } from './pages/role/role/role.component';
+import { ResetComponent } from './auth/reset/reset.component';
+
 
 
 
@@ -53,7 +55,8 @@ import { RoleComponent } from './pages/role/role/role.component';
     MessagesDialogComponent,
     SubmitResetComponent,
     HomeComponent,
-    RoleComponent
+    RoleComponent,
+    ResetComponent
   
   ],
   imports: [
