@@ -1,11 +1,13 @@
 //springboot
 export const rootUrl = 'http://springboot.local:8085';
 export const emailUrl = "http://springboot.local:8080/api/v1";
+export const frontendUrl='http://localhost:4200';
 //export const emailUrl = "http://springboot.local:8090/apache_email/api/v1";
 
 //poseidon
 //export const rootUrl = 'http://poseidon.spain.agilent.com:8085';
 //export const emailUrl = "http://poseidon.spain.agilent.com:8090/apache_email/api/v1";
+//export const frontendUrl='http://poseidon.spain.agilent.com';
 
 
 export const authUrl = "/api/v1/auth";

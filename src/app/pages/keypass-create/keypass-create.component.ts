@@ -59,9 +59,9 @@ export class KeypassCreateComponent {
     this.keypassService.addKeypass(this.enterpriseId, this.keypass).subscribe((res:any) => {
       console.log('keypass created successfully: '+ res.username);
       console.log('user_type: '+ res.user_type);
-      this.messageService.ScreeMessage ('Keys properly inserted !!');
+      this.messageService.SweetMessage ('Keys properly inserted !!');
       if(this.keypassId!=0){
-        this.router.navigateByUrl(`enterprises/${this.enterpriseId}/keypass`);
+        this.router.navigateByUrl(`enterprises/${this.enterpriseId}`);
       }
       else{
   

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessagesService } from 'src/app/services/messages.service';
 import { ResetService } from 'src/app/services/reset.service';
 
@@ -14,9 +14,9 @@ import { ResetService } from 'src/app/services/reset.service';
 export class ResetComponent implements OnInit {
 
   ngOnInit(): void {
-    this.user.email='';
+    this.user.email=this.route.snapshot.params['email'];'';
   }
-  constructor(private http:HttpClient,private resetService:ResetService,private snack:MatSnackBar, private router:Router, private infoMessage:MessagesService) { }
+  constructor(private http:HttpClient,private resetService:ResetService,private snack:MatSnackBar, private route: ActivatedRoute,private router:Router, private infoMessage:MessagesService) { }
   public user = {
     email : '',
     password : '',

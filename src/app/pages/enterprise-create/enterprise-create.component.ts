@@ -96,5 +96,9 @@ export class EnterpriseCreateComponent {
 
     }
   }
+  ToPasswords(){
+    console.log(`enterprises/${this.enterprise.id}/keypass/${this.role}`);
+    this.router.navigateByUrl(`enterprises/${this.enterprise.id}/keypass/${this.role}`);
+  }
 
 }

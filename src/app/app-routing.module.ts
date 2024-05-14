@@ -26,7 +26,7 @@ const routes: Routes = [
   {path: 'enterprises/:id',component: EnterpriseCreateComponent},
   {path: 'testformgroup', component: TestFormgroupComponent},
   {path: 'sigup' , component:SigupComponent},
-  {path: 'reset' , component:ResetComponent}
+  {path: 'reset/:email' , component:ResetComponent}
 ];
 
 @NgModule({
