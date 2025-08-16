@@ -1,21 +1,8 @@
-//springboot
-export const rootUrl = 'http://springboot.local:8085';
-export const emailUrl = "http://springboot.local:8080/api/v1";
-export const frontendUrl='http://localhost:4200';
-//export const emailUrl = "http://springboot.local:8090/apache_email/api/v1";
+import { environment } from 'src/environments/environment';
 
-//poseidon
-//export const rootUrl = 'http://poseidon.spain.agilent.com:8085';
-//export const emailUrl = "http://poseidon.spain.agilent.com:8090/apache_email/api/v1";
-//export const frontendUrl='http://poseidon.spain.agilent.com';
-
+export const rootUrl = environment.rootUrl;
+export const emailUrl = environment.emailUrl;
+export const frontendUrl = environment.frontendUrl;
 
 export const authUrl = "/api/v1/auth";
 export const apiUrl= "/api/v1";
-
-//export const rootUrl = 'http://Angular-VMW.local:8085';
-//export const emailUrl = "http://Angular-VMW.local:8080/api/v1";
-
-
-
-

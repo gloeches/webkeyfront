@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Environment Configuration</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Managing Environment Variables in Your Angular Application</h1>
+    <p>This document provides a complete guide to using Angular's built-in environment configuration to manage environment-specific variables, such as API URLs, without having to modify your code every time you switch between development, staging, and production environments.</p>
+
+    <h2>1. Understanding the Angular Environment Setup</h2>
+    <p>Your project has an <code>environments</code> folder in the <code>src</code> directory. This folder contains files for different environments:</p>
+    <ul>
+        <li><code>environment.ts</code>: Used for production builds by default.</li>
+        <li><code>environment.development.ts</code>: Used for development builds.</li>
+        <li><code>environment.staging.ts</code>: Used for staging builds.</li>
+    </ul>
+    <p>The magic happens in the <code>angular.json</code> file, which is configured to replace <code>environment.ts</code> with the appropriate environment-specific file at build time.</p>
+
+    <h2>2. Populating Your Environment Files</h2>
+    <p>The first step is to populate your environment files with the correct URLs for each environment.</p>
+
+    <h3>Production (<code>src/environments/environment.ts</code>)</h3>
+    <pre><code>export const environment = {
+    production: true,
+    rootUrl: 'http://localhost:8085',
+    emailUrl: 'http://springboot-prox.local:8090/apache_email/api/v1',
+    frontendUrl: 'http://localhost:4200'
+};</code></pre>
+
+    <h3>Development (<code>src/environments/environment.development.ts</code>)</h3>
+    <pre><code>export const environment = {
+    production: false,
+    rootUrl: 'http://springboot-prox.local:8085',
+    emailUrl: 'http://springboot-prox.local:8090/apache_email/api/v1',
+    frontendUrl: 'http://localhost:4200'
+};</code></pre>
+
+    <h3>Staging (<code>src/environments/environment.staging.ts</code>)</h3>
+    <pre><code>export const environment = {
+    production: true,
+    rootUrl: 'http://poseidon.spain.agilent.com:8085',
+    emailUrl: 'http://poseidon.spain.agilent.com:8090/apache_email/api/v1',
+    frontendUrl: 'http://poseidon.spain.agilent.com'
+};</code></pre>
+
+    <h2>3. Updating the <code>constants.ts</code> File</h2>
+    <p>Next, you need to update your <code>src/app/shared/header/constants.ts</code> file to import and use the variables from the environment files. This eliminates the need for hardcoded and commented-out URLs.</p>
+    <pre><code>import { environment } from 'src/environments/environment';
+
+export const rootUrl = environment.rootUrl;
+export const emailUrl = environment.emailUrl;
+export const frontendUrl = environment.frontendUrl;
+
+export const authUrl = "/api/v1/auth";
+export const apiUrl= "/api/v1";</code></pre>
+
+    <h2>4. Building and Serving for Different Environments</h2>
+    <p>To switch between configurations, use the <code>--configuration</code> flag (or <code>-c</code>) with the <code>ng serve</code> and <code>ng build</code> commands.</p>
+
+    <h3>For Development</h3>
+    <p>To serve the application with the development configuration:</p>
+    <pre><code>ng serve --configuration=development</code></pre>
+    <p>To build the application for the development environment:</p>
+    <pre><code>ng build --configuration=development</code></pre>
+
+    <h3>For Staging</h3>
+    <p>To serve the application with the staging configuration:</p>
+    <pre><code>ng serve --configuration=staging</code></pre>
+    <p>To build the application for the staging environment:</p>
+    <pre><code>ng build --configuration=staging</code></pre>
+
+    <h3>For Production</h3>
+    <p>To serve the application with the production configuration:</p>
+    <pre><code>ng serve --configuration=production</code></pre>
+    <p>To build the application for production (this is the default):</p>
+    <pre><code>ng build</code></pre>
+
+    <h2>5. How It Works</h2>
+    <p>When you run a command like <code>ng build --configuration=staging</code>, the Angular CLI checks your <code>angular.json</code> file for the <code>staging</code> configuration. It finds the <code>fileReplacements</code> array and, during the build process, it swaps <code>src/environments/environment.ts</code> with <code>src/environments/environment.staging.ts</code>. As a result, the <code>environment</code> object imported into your <code>constants.ts</code> file is the one from the staging environment file, and your application uses the staging URLs.</p>
+    <p>Your <code>Dockerfile</code> uses <code>npm run build --prod</code>, which is equivalent to <code>ng build --configuration=production</code>. This ensures that your Docker image is always built with the production URLs from <code>src/environments/environment.ts</code>.</p>
+
+</body>
+</html>

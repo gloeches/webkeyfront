@@ -1,0 +1,39 @@
+//springboot
+//export const rootUrl = 'http://springboot.local:8085';
+//export const emailUrl = "http://springboot.local:8080/api/v1";
+//export const frontendUrl='http://localhost:4200';
+//export const emailUrl = "http://springboot.local:8090/apache_email/api/v1";
+
+//springboot-prox
+//export const rootUrl = 'http://springboot-prox.local:8085';
+//export const emailUrl = "http://springboot-prox.local:8080/api/v1";
+//export const frontendUrl='http://localhost:4200';
+//export const emailUrl = "http://springboot-prox.local:8090/apache_email/api/v1";
+
+
+//poseidon
+//export const rootUrl = 'http://poseidon.spain.agilent.com:8085';
+//export const emailUrl = "http://poseidon.spain.agilent.com:8090/apache_email/api/v1";
+//export const frontendUrl='http://poseidon.spain.agilent.com';
+
+
+export const authUrl = "/api/v1/auth";
+export const apiUrl= "/api/v1";
+
+//export const rootUrl = 'http://Angular-VMW.local:8085';
+//export const emailUrl = "http://Angular-VMW.local:8080/api/v1";
+
+
+
+
+//SpringBoot-esxi
+//export const rootUrl = 'http://springboot-esxi.local:8085';
+//export const emailUrl = "http://springboot-prox.local:8080/api/v1";
+//export const frontendUrl='http://localhost:4200';
+//export const emailUrl = "http://springboot-prox.local:8090/apache_email/api/v1";
+
+//Docker
+export const rootUrl = 'http://localhost:8085';
+//export const emailUrl = "http://springboot-prox.local:8080/api/v1";
+export const frontendUrl='http://localhost:4200';
+export const emailUrl = "http://springboot-prox.local:8090/apache_email/api/v1";

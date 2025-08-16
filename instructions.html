@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dockerization Instructions</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dockerizing the Angular Application</h1>
+    <p>This document provides detailed instructions to create a multi-stage Dockerfile and build a Docker image for this Angular application using Nginx.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li><a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a> installed on your machine.</li>
+    </ul>
+
+    <h2>Understanding the Dockerization Files</h2>
+
+    <h3>1. The <code>.dockerignore</code> file</h3>
+    <p>This file is crucial for speeding up the Docker build process and keeping the image size small. It lists files and directories that should be excluded from the build context. The most important exclusion is <code>node_modules/</code>, as these dependencies will be installed inside the container.</p>
+
+    <h3>2. The <code>nginx.conf</code> file</h3>
+    <p>This file configures the Nginx web server to correctly serve the Angular application. Here's a breakdown of the configuration:</p>
+    <pre><code>server {
+  listen 80;
+  server_name localhost;
+
+  root /usr/share/nginx/html;
+  index index.html;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+}</code></pre>
+    <ul>
+        <li><code>listen 80;</code>: Nginx listens on port 80 inside the container.</li>
+        <li><code>root /usr/share/nginx/html;</code>: This is the directory where Nginx will look for the application files.</li>
+        <li><code>location / { ... }</code>: This block handles incoming requests.</li>
+        <li><code>try_files $uri $uri/ /index.html;</code>: This is the key directive for single-page applications (SPAs) like Angular. It tells Nginx to first look for a file that matches the request URI (<code>$uri</code>), then a directory (<code>$uri/</code>), and if neither is found, it will fall back to serving the <code>/index.html</code> file. This allows Angular's client-side routing to take over.</li>
+    </ul>
+
+    <h3>3. The Multi-Stage <code>Dockerfile</code></h3>
+    <p>A multi-stage build is the best practice for building front-end applications with Docker. It allows you to build the application in a temporary environment with all the necessary build tools (like Node.js and the Angular CLI) and then copy only the final, static build artifacts to a lean production image (like Nginx). This results in a much smaller and more secure production image.</p>
+
+    <h4>Stage 1: The Build Stage</h4>
+    <p>This stage is responsible for building the Angular application.</p>
+    <pre><code># Stage 1: Build the application
+FROM node:18 as build
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build --prod</code></pre>
+    <ul>
+        <li><code>FROM node:18 as build</code>: This line starts a new build stage named `build` based on the official Node.js 18 image.</li>
+        <li><code>WORKDIR /usr/src/app</code>: Sets the working directory inside the container.</li>
+        <li><code>COPY package*.json ./</code>: Copies the `package.json` and `package-lock.json` files. This is done as a separate step to leverage Docker's layer caching. If these files haven't changed, Docker will reuse the cached layer from the previous build, speeding up the process.</li>
+        <li><code>RUN npm install</code>: Installs the project dependencies.</li>
+        <li><code>COPY . .</code>: Copies the rest of the application's source code into the container.</li>
+        <li><code>RUN npm run build --prod</code>: Builds the Angular application for production. The output will be placed in the `/usr/src/app/dist/webkeyfront` directory.</li>
+    </ul>
+
+    <h4>Stage 2: The Production Stage</h4>
+    <p>This stage takes the built application from the `build` stage and serves it with Nginx.</p>
+    <pre><code># Stage 2: Serve the application
+FROM nginx:alpine
+
+COPY --from=build /usr/src/app/dist/webkeyfront /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80</code></pre>
+    <ul>
+        <li><code>FROM nginx:alpine</code>: This starts the final production stage using a lightweight `nginx:alpine` image.</li>
+        <li><code>COPY --from=build /usr/src/app/dist/webkeyfront /usr/share/nginx/html</code>: This is the magic of the multi-stage build. It copies the built application from the `build` stage (from the `/usr/src/app/dist/webkeyfront` directory) into the Nginx server's root directory.</li>
+        <li><code>COPY nginx.conf /etc/nginx/conf.d/default.conf</code>: Copies the Nginx configuration file to the appropriate location in the Nginx image.</li>
+        <li><code>EXPOSE 80</code>: Informs Docker that the container listens on port 80 at runtime.</li>
+    </ul>
+
+    <h2>Building and Running the Image</h2>
+    <ol>
+        <li>
+            <h3>Build the Docker Image</h3>
+            <p>Open a terminal or command prompt in the root directory of the project and run the following command:</p>
+            <pre><code>docker build -t webkeyfront .</code></pre>
+            <ul>
+                <li><code>docker build</code>: The command to build a Docker image.</li>
+                <li><code>-t webkeyfront</code>: The <code>-t</code> flag tags the image with a name (in this case, `webkeyfront`). This makes it easier to refer to the image later.</li>
+                <li><code>.</code>: This specifies that the build context is the current directory.</li>
+            </ul>
+        </li>
+        <li>
+            <h3>Run the Docker Container</h3>
+            <p>After the image is built successfully, run the following command to start a Docker container:</p>
+            <pre><code>docker run -d -p 8080:80 --name webkeyfront webkeyfront</code></pre>
+            <ul>
+                <li><code>docker run</code>: The command to run a Docker container.</li>
+                <li><code>-d</code>: Runs the container in detached mode (in the background).</li>
+                <li><code>-p 8080:80</code>: Maps port 8080 on your local machine to port 80 inside the container. You can change `8080` to any other available port on your machine.</li>
+                <li><code>--name webkeyfront</code>: Assigns the name `webkeyfront` to the container. This makes it easier to manage the container (e.g., stop, start, remove).</li>
+                <li><code>webkeyfront</code>: The name of the image to run.</li>
+            </ul>
+        </li>
+        <li>
+            <h3>Access the Application</h3>
+            <p>Once the container is running, you can access the application by navigating to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> in your web browser.</p>
+        </li>
+    </ol>
+
+    <h2>Stopping the Container</h2>
+    <p>To stop the container, you can use the container name you assigned:</p>
+    <pre><code>docker stop webkeyfront</code></pre>
+    <p>Alternatively, you can find the container ID by running <code>docker ps</code> and then use the ID to stop the container:</p>
+    <pre><code>docker stop &lt;container_id&gt;</code></pre>
+</body>
+</html>
