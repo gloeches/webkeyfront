@@ -9,12 +9,7 @@
         <label for="Company Name">Company Name: </label>
     </div>
     <div class="p-2">
-        <input id="Company Name" #enterpriseName>
-    </div>
-    <div class="p-1">
-        <button class="btn btn-info p-2" type ="button" (click)="getEnterprisesLikeName(enterpriseName.value)">
-            <span> Filter by name</span>
-        </button>
+        <input id="Company Name" #enterpriseName (input)="getEnterprisesLikeName(enterpriseName.value)">
     </div>
     <div class="p-1">
         <button class="btn btn-info p-2" type ="button" (click)="createEnterprise()">

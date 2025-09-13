@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How the Angular Highlight Pipe Works</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2, h3 { color: #333; }
+        code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Tutorial: How the Angular Highlight Pipe Works</h1>
+
+    <h2>Introduction</h2>
+    <p>In Angular, a pipe is a simple way to transform data in your HTML templates. You can use pipes to format dates, numbers, and strings, or to filter and sort lists. In this tutorial, we'll go through the process of creating a custom `highlight` pipe that highlights a search term in a block of text.</p>
+
+    <h2>The Goal</h2>
+    <p>Our goal is to create a pipe that can take a string of text and a search term, and return a new string with all occurrences of the search term wrapped in a `<span>` tag with a yellow background. For example, if the text is "Hello World" and the search term is "o", the pipe should produce "Hell<span style='background-color: yellow;'>o</span> W<span style='background-color: yellow;'>o</span>rld".</p>
+
+    <h2>Step 1: Creating the Pipe File</h2>
+    <p>First, you need to create a new file for your pipe. A good practice is to keep your pipes in a dedicated folder, for example, `src/app/pipes/`.</p>
+    <h3>File: <code>src/app/pipes/highlight.pipe.ts</code></h3>
+    <pre><code>
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+@Pipe({
+  name: 'highlight'
+})
+export class HighlightPipe implements PipeTransform {
+
+  constructor(private sanitizer: DomSanitizer) { }
+
+  transform(text: string, search: string): SafeHtml {
+    if (!search) {
+      return text;
+    }
+    const regex = new RegExp(search, 'gi');
+    const match = text.match(regex);
+    if (!match) {
+      return text;
+    }
+    const highlightedText = text.replace(regex, `&lt;span style="background-color: yellow;"&gt;${match[0]}&lt;/span&gt;`);
+    return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
+  }
+}
+    </code></pre>
+
+    <h2>Step 2: Understanding the Pipe's Code</h2>
+    <h3>The `@Pipe` Decorator</h3>
+    <p>The `@Pipe` decorator at the top of the file tells Angular that this class is a pipe. The `name` property, `'highlight'`, is the name you will use in your templates to apply the pipe.</p>
+
+    <h3>The `PipeTransform` Interface</h3>
+    <p>The `PipeTransform` interface is not strictly required, but it's a good practice to use it. It enforces that your class has a `transform` method, which is the method that does the actual work of the pipe.</p>
+
+    <h3>The `transform` Method</h3>
+    <p>This is the core of the pipe. It takes at least one argument: the value to be transformed. In our case, it takes two arguments: `text` (the original text) and `search` (the term to highlight).</p>
+    <ul>
+        <li><strong>Regular Expression</strong>: `const regex = new RegExp(search, 'gi');` creates a regular expression to find all (`g`) occurrences of the search term, ignoring case (`i`).</li>
+        <li><strong>Replacing the Text</strong>: `text.replace(regex, ...)` replaces the matched text with our custom HTML.</li>
+    </ul>
+
+    <h3>Security: `DomSanitizer`</h3>
+    <p>By default, Angular does not render HTML that is dynamically added to the page. This is a security feature to prevent XSS attacks. Since our pipe generates HTML (the `<span>` tag), we need to tell Angular that this HTML is safe.</p>
+    <p>We do this by injecting the `DomSanitizer` service and using its `bypassSecurityTrustHtml` method. This returns a `SafeHtml` object that Angular knows is safe to render.</p>
+
+    <h2>Step 3: Using the Pipe</h2>
+    <h3>Register the Pipe</h3>
+    <p>Before you can use the pipe, you need to add it to the `declarations` array in your `app.module.ts`:</p>
+    <pre><code>
+// in src/app/app.module.ts
+
+import { HighlightPipe } from './pipes/highlight.pipe';
+
+@NgModule({
+  declarations: [
+    // ...
+    HighlightPipe
+  ],
+  // ...
+})
+export class AppModule { }
+    </code></pre>
+
+    <h3>Use it in a Template</h3>
+    <p>Now you can use the pipe in any of your component templates. The syntax is `value | pipeName:argument1:argument2...`.</p>
+    <p>Because our pipe returns HTML, we need to use the `[innerHTML]` property binding:</p>
+    <pre><code>
+&lt;!-- in your component's HTML file --&gt;
+
+&lt;p [innerHTML]="myText | highlight: mySearchTerm"&gt;&lt;/p&gt;
+    </code></pre>
+    <p>In this example, `myText` and `mySearchTerm` would be properties in your component's TypeScript file.</p>
+
+    <h2>Conclusion</h2>
+    <p>Custom pipes are a powerful feature in Angular for transforming data in your templates. By creating a `highlight` pipe, you can easily add search highlighting to your application in a clean and reusable way.</p>
+
+</body>
+</html>

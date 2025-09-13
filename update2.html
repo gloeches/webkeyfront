@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highlight Search Results</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2, h3 { color: #333; }
+        code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; white-space: pre-wrap; }
+        .before { border-left: 3px solid #f00; }
+        .after { border-left: 3px solid #0c0; }
+    </style>
+</head>
+<body>
+    <h1>Highlighting Search Results</h1>
+    <p>This document explains how to create a custom Angular pipe to highlight the search term in the list of enterprises.</p>
+
+    <h2>Step 1: Create the Highlight Pipe</h2>
+    <p>A custom pipe is a great way to transform data in your templates. In this case, we'll create a pipe to wrap the matching text in a `<span>` tag with a yellow background.</p>
+
+    <h3>Create the file <code>src/app/shared/header/highlight.pipe.ts</code></h3>
+    <pre><code>
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+@Pipe({
+  name: 'highlight'
+})
+export class HighlightPipe implements PipeTransform {
+
+  constructor(private sanitizer: DomSanitizer) { }
+
+  transform(text: string, search: string): SafeHtml {
+    if (!search) {
+      return text;
+    }
+    const regex = new RegExp(search, 'gi');
+    const match = text.match(regex);
+    if (!match) {
+      return text;
+    }
+    const highlightedText = text.replace(regex, `&lt;span style="background-color: yellow;"&gt;${match[0]}&lt;/span&gt;`);
+    return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
+  }
+}
+    </code></pre>
+
+    <h3>How the Pipe Works</h3>
+    <p>The `HighlightPipe` takes a string of text and a search term as input. It finds all occurrences of the search term in the text and wraps them in a `<span>` tag with a yellow background. Here's a breakdown of the `transform` method:</p>
+    <ul>
+        <li><strong>`transform(text: string, search: string): SafeHtml`</strong>: This is the main method of the pipe. It takes the `text` to transform and the `search` term as arguments. It returns a `SafeHtml` object, which is a special type that tells Angular the HTML is safe to render.</li>
+        <li><strong>`if (!search)`</strong>: If the search term is empty, the original text is returned without any changes.</li>
+        <li><strong>`const regex = new RegExp(search, 'gi')`</strong>: This creates a regular expression to find the search term. The `'g'` flag means it will find all occurrences, and the `'i'` flag makes the search case-insensitive.</li>
+        <li><strong>`const highlightedText = text.replace(...)`</strong>: The `replace` method is used to replace the search term with the HTML for the highlighted text.</li>
+        <li><strong>`this.sanitizer.bypassSecurityTrustHtml(highlightedText)`</strong>: This is a crucial security step. Angular's `DomSanitizer` helps prevent cross-site scripting (XSS) attacks by sanitizing values before rendering them as HTML. By calling `bypassSecurityTrustHtml`, we are telling Angular that we trust the HTML we are generating and that it should be rendered as-is.</li>
+    </ul>
+
+    <h2>Step 2: Register the Pipe in <code>app.module.ts</code></h2>
+    <p>To use the new pipe, you need to declare it in your application's module.</p>
+
+    <h3>In <code>src/app/app.module.ts</code>:</h3>
+    <pre><code>
+// ... other imports
+import { HighlightPipe } from './shared/header/highlight.pipe';
+
+@NgModule({
+  declarations: [
+    // ... other components and pipes
+    HighlightPipe
+  ],
+  // ... other module properties
+})
+export class AppModule { }
+    </code></pre>
+
+    <h2>Step 3: Update <code>enterprises.component.ts</code></h2>
+    <p>The component needs to keep track of the current search term.</p>
+
+    <h3>In <code>src/app/pages/enterprises/enterprises.component.ts</code>:</h3>
+    <pre><code>
+// ... other imports
+
+export class EnterprisesComponent {
+  // ... other properties
+  searchTerm: string = '';
+
+  // ... other methods
+
+  getEnterprisesLikeName(_name:string):void{
+    this.searchTerm = _name;
+    this.enterpriseService.getEnterpriseLikeName(_name).subscribe(enterprises => this.enterprises = enterprises);
+  }
+
+  // ... other methods
+}
+    </code></pre>
+
+    <h2>Step 4: Update <code>enterprises.component.html</code> and Understand `[innerHTML]`</h2>
+    <p>Finally, apply the pipe to the company name in the template. You need to use `[innerHTML]` because the pipe returns HTML.</p>
+
+    <h3>What is `[innerHTML]`? A Simple Example</h3>
+    <p>Imagine you have a property in your component called `myContent`:</p>
+    <pre><code>
+export class YourComponent {
+  myContent: string = '&lt;b&gt;Hello World&lt;/b&gt;';
+}
+    </code></pre>
+    <p>Now, let's see how to display this property in your template in two different ways:</p>
+    <h4>1. Interpolation `{{ }}`</h4>
+    <p>If you use interpolation, Angular will treat the content as plain text and escape the HTML tags for security reasons.</p>
+    <pre><code>
+&lt;span&gt;{{ myContent }}&lt;/span&gt;
+    </code></pre>
+    <p><strong>Result:</strong> The user will see the literal text `<b>Hello World</b>` on the screen.</p>
+
+    <h4>2. Property Binding `[innerHTML]`</h4>
+    <p>If you use `[innerHTML]`, you are telling Angular to parse the string as HTML and render it inside the element.</p>
+    <pre><code>
+&lt;span [innerHTML]="myContent"&gt;&lt;/span&gt;
+    </code></pre>
+    <p><strong>Result:</strong> The user will see the text <strong>Hello World</strong> in bold.</p>
+    <p>This is exactly what we need for our `highlight` pipe, as it returns a string containing HTML (`<span>` tags) that we want the browser to render.</p>
+
+
+    <h3>In <code>src/app/pages/enterprises/enterprises.component.html</code>:</h3>
+
+    <h4>Before:</h4>
+    <pre class="before"><code>
+&lt;td&gt;
+    &lt;a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit"&gt;{{ enterprise.name }}&lt;/a&gt;
+&lt;/td&gt;
+    </code></pre>
+
+    <h4>After:</h4>
+    <pre class="after"><code>
+&lt;td&gt;
+    &lt;a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit" [innerHTML]="enterprise.name | highlight: searchTerm"&gt;&lt;/a&gt;
+&lt;/td&gt;
+    </code></pre>
+
+</body>
+</html>

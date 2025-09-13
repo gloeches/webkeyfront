@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Filter Update</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2, h3 { color: #333; }
+        code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; white-space: pre-wrap; }
+        .before { border-left: 3px solid #f00; }
+        .after { border-left: 3px solid #0c0; }
+    </style>
+</head>
+<body>
+    <h1>Enterprise Filter Update</h1>
+    <p>This document details the changes needed to update the enterprise filter functionality. The goal is to remove the "Filter by name" button and have the list filter automatically as you type in the text box.</p>
+
+    <h2>File to Modify: <code>src/app/pages/enterprises/enterprises.component.html</code></h2>
+    <p>The only file that needs to be changed is the HTML template for the enterprises component.</p>
+
+    <h3>Before</h3>
+    <pre class="before"><code>
+&lt;div class="d-flex justify-content-center p-2 bd-highlight"&gt;
+    &lt;div class="p-2"&gt;
+        &lt;label for="Company Name"&gt;Company Name: &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class="p-2"&gt;
+        &lt;input id="Company Name" #enterpriseName&gt;
+    &lt;/div&gt;
+    &lt;div class="p-1"&gt;
+        &lt;button class="btn btn-info p-2" type ="button" (click)="getEnterprisesLikeName(enterpriseName.value)"&gt;
+            &lt;span&gt; Filter by name&lt;/span&gt;
+        &lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="p-1"&gt;
+        &lt;button class="btn btn-info p-2" type ="button" (click)="createEnterprise()"&gt;
+            &lt;span&gt; Create Enterprise&lt;/span&gt;
+        &lt;/button&gt;
+    &lt;/div&gt;
+   
+&lt;/div&gt;
+    </code></pre>
+
+    <h3>After</h3>
+    <pre class="after"><code>
+&lt;div class="d-flex justify-content-center p-2 bd-highlight"&gt;
+    &lt;div class="p-2"&gt;
+        &lt;label for="Company Name"&gt;Company Name: &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class="p-2"&gt;
+        &lt;input id="Company Name" #enterpriseName (input)="getEnterprisesLikeName(enterpriseName.value)"&gt;
+    &lt;/div&gt;
+    &lt;div class="p-1"&gt;
+        &lt;button class="btn btn-info p-2" type ="button" (click)="createEnterprise()"&gt;
+            &lt;span&gt; Create Enterprise&lt;/span&gt;
+        &lt;/button&gt;
+    &lt;/div&gt;
+   
+&lt;/div&gt;
+    </code></pre>
+
+    <h2>No Changes Needed: <code>src/app/pages/enterprises/enterprises.component.ts</code></h2>
+    <p>No changes are needed in the TypeScript file. The existing <code>getEnterprisesLikeName</code> method is already set up to handle the filtering logic.</p>
+
+</body>
+</html>
