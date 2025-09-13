@@ -53,7 +53,7 @@
                     </td>
             -->
                     <td>
-                        <a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit">{{ enterprise.name }}</a>
+                         <a href="#" [routerLink]="['/enterprises/',enterprise.id]" class="edit" [innerHTML]="enterprise.name | highlight: searchTerm"></a>
                     </td>
                     <td class="text-center">{{ enterprise.projectLeader }}</td>
                     <td class="text-center">

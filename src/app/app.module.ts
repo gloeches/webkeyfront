@@ -33,6 +33,7 @@ import { MessagesDialogComponent } from './messages/messages-dialog/messages-dia
 import { HomeComponent } from './pages/home/home.component';
 import { RoleComponent } from './pages/role/role/role.component';
 import { ResetComponent } from './auth/reset/reset.component';
+import { HighlightPipe } from './shared/highlight.pipe';
 
 
 
@@ -40,6 +41,7 @@ import { ResetComponent } from './auth/reset/reset.component';
 @NgModule({
   declarations: [
     AppComponent,
+    HighlightPipe,
     EnterprisesComponent,
     MessagesComponent,
     LoginComponent,

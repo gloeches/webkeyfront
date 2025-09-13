@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding a New Angular Environment</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Adding an "onpremise" Environment to Your Angular Project</h1>
+
+    <p>This guide explains how to add a new <code>onpremise</code> build environment to your Angular application. This is useful for creating a specific build configuration for on-premise deployments.</p>
+
+    <h2>Step 1: Create the New Environment File</h2>
+
+    <p>First, create a new file named <code>environment.onpremise.ts</code> inside the <code>src/environments/</code> directory. This file will contain the specific configuration for your on-premise deployment.</p>
+
+    <p>The content of <code>src/environments/environment.onpremise.ts</code> should be:</p>
+    <div style="background-color: lightyellow;">
+    <pre><code>
+export const environment = {
+    production: true,
+    rootUrl: 'http://your-onpremise-api-url',
+    emailUrl: 'http://your-onpremise-email-url',
+    frontendUrl: 'http://your-onpremise-frontend-url',
+    constante: 'onpremise'
+};
+    </code></pre>
+    </div>
+
+    <h2>Step 2: Update angular.json</h2>
+
+    <p>Next, you need to tell the Angular CLI about this new environment. Open your <code>angular.json</code> file and make the following changes.</p>
+
+    <h3>Add the "onpremise" configuration to the "build" architect:</h3>
+    <p>In the <code>projects.webkeyfront.architect.build.configurations</code> section, add a new <code>onpremise</code> configuration. This will tell the build system to use your new environment file when you build for on-premise.</p>
+
+    <pre><code>
+"configurations": {
+  "production": {
+    ...
+  },
+  "development": {
+    ...
+  },
+  <div style="background-color: lightyellow; display: inline-block;">
+  "onpremise": {
+    "fileReplacements": [
+      {
+        "replace": "src/environments/environment.ts",
+        "with": "src/environments/environment.onpremise.ts"
+      }
+    ],
+    "optimization": true,
+    "outputHashing": "all",
+    "sourceMap": false,
+    "extractCss": true,
+    "namedChunks": false,
+    "extractLicenses": true,
+    "vendorChunk": false,
+    "buildOptimizer": true,
+    "budgets": [
+      {
+        "type": "initial",
+        "maximumWarning": "500kb",
+        "maximumError": "1mb"
+      },
+      {
+        "type": "anyComponentStyle",
+        "maximumWarning": "2kb",
+        "maximumError": "4kb"
+      }
+    ]
+  }
+  </div>
+}
+    </code></pre>
+
+    <h3>Add the "onpremise" configuration to the "serve" architect:</h3>
+    <p>In the <code>projects.webkeyfront.architect.serve.configurations</code> section, add a new <code>onpremise</code> configuration. This will allow you to use the <code>ng serve</code> command with your on-premise configuration for local testing.</p>
+
+    <pre><code>
+"configurations": {
+  "production": {
+    ...
+  },
+  "development": {
+    ...
+  },
+  <div style="background-color: lightyellow; display: inline-block;">
+  "onpremise": {
+    "browserTarget": "webkeyfront:build:onpremise"
+  }
+  </div>
+}
+    </code></pre>
+
+    <h2>Step 3: Build or Serve with the New Environment</h2>
+
+    <p>You can now build your application using the on-premise configuration with the following command:</p>
+    <pre><code>
+ng build --configuration=onpremise
+    </code></pre>
+
+    <p>To serve the application locally using the on-premise configuration, use:</p>
+    <pre><code>
+ng serve --configuration=onpremise
+    </code></pre>
+
+</body>
+</html>

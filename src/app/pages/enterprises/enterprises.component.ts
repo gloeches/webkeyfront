@@ -25,6 +25,7 @@ export class EnterprisesComponent {
   constructor(private router: Router,private enterpriseService: EnterpriseService, private keypassService:KeypassService,private confirmation:MessagesService,private data:ExchangeDataService){}
   selectedEnterprise?: Enterprise;
   _enterprise?:Enterprise;
+   searchTerm: string = '';
 
   ngOnInit(): void {
     this.getEnterprises();
@@ -43,6 +44,7 @@ export class EnterprisesComponent {
     this.enterpriseService.getEnterprises().subscribe(enterprises => this.enterprises = enterprises);
   }
   getEnterprisesLikeName(_name:string):void{
+     this.searchTerm = _name;
     this.enterpriseService.getEnterpriseLikeName(_name).subscribe(enterprises => this.enterprises = enterprises);
   }
   
