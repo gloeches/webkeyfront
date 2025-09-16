@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Environment Configuration in Angular with Docker and APP_INITIALIZER</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1, h2, h3, h4 {
+            color: #0d47a1;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        h4 { 
+            border-bottom: 1px solid #e0e0e0;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        code {
+            font-family: "Courier New", Courier, monospace;
+        }
+        .step {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-left: 5px solid #0d47a1;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .filename {
+            font-weight: bold;
+            font-family: monospace;
+            color: #c62828;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .warning {
+            background-color: #fff3e0;
+            border-left-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dynamic Environment Configuration in Angular with Docker and APP_INITIALIZER</h1>
+
+    <p>This document outlines a clean, maintainable, and "Angular-native" method for providing runtime configuration (like an API URL) to an Angular application running inside a Docker container.</p>
+
+    <div class="step">
+        <h3>Step 1: Create JSON Configuration Files</h3>
+        <p>We need a file for local development and a template for Docker. The JSON file will now contain all the values that were previously in <code>environment.ts</code>.</p>
+        
+        <span class="filename">src/assets/config/config.json</span>
+        <pre><code>{
+  "rootUrl": "http://localhost:8080",
+  "emailUrl": "http://localhost:8081",
+  "frontendUrl": "http://localhost:4200"
+}</code></pre>
+
+        <span class="filename">config.template.json</span>
+        <p>This template in your project root will be used by Docker. We will pass <code>ROOT_URL</code> as the environment variable to the container.</p>
+        <pre><code>{
+  "rootUrl": "${ROOT_URL}",
+  "emailUrl": "${EMAIL_URL}",
+  "frontendUrl": "${FRONTEND_URL}"
+}</code></pre>
+    </div>
+
+    <div class="step">
+        <h3>Step 2: Create the AppConfigService</h3>
+        <p>This service is responsible for fetching and storing the configuration from <code>config.json</code>.</p>
+        <span class="filename">src/app/services/app-config.service.ts</span>
+        <pre><code>import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+
+// This interface defines the shape of our configuration
+export interface IAppConfig {
+  rootUrl: string;
+  emailUrl: string;
+  frontendUrl: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AppConfigService {
+
+  private appConfig?: IAppConfig;
+
+  constructor(private http: HttpClient) { }
+
+  loadAppConfig() {
+    return this.http.get&lt;IAppConfig&gt;('/assets/config/config.json')
+      .pipe(
+        tap(config => {
+          this.appConfig = config;
+        })
+      );
+  }
+
+  getConfig(): IAppConfig {
+    if (!this.appConfig) {
+      throw Error('Config file not loaded!');
+    }
+    return this.appConfig;
+  }
+}</code></pre>
+    </div>
+
+    <div class="step">
+        <h3>Step 3: Create a New ConstantsService</h3>
+        <p>Because <code>constants.ts</code> exports compile-time constants, we must convert it into a service to hold values that are determined at runtime. This is the most significant change.</p>
+
+        <span class="filename">src/app/shared/header/constants.service.ts</span>
+        <pre><code>import { Injectable } from '@angular/core';
+import { IAppConfig } from 'src/app/services/app-config.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ConstantsService {
+  // Properties to hold the values
+  rootUrl = '';
+  emailUrl = '';
+  frontendUrl = '';
+
+  // Hardcoded values can remain
+  readonly authUrl = '/api/v1/auth';
+  readonly apiUrl = '/api/v1';
+
+  constructor() { }
+
+  // A method to load the dynamic values from the main config
+  load(config: IAppConfig) {
+    this.rootUrl = config.rootUrl;
+    this.emailUrl = config.emailUrl;
+    this.frontendUrl = config.frontendUrl;
+  }
+}</code></pre>
+    </div>
+
+    <div class="step warning">
+        <h3>Step 4: Update AppModule to Initialize Both Services</h3>
+        <p>We will now update the <code>APP_INITIALIZER</code> to load the main configuration and then immediately use it to populate our new <code>ConstantsService</code>.</p>
+        <span class="filename">src/app/app.module.ts</span>
+        <pre><code>import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppComponent } from './app.component';
+import { AppConfigService } from './services/app-config.service';
+import { ConstantsService } from './shared/header/constants.service'; // &lt;-- Import ConstantsService
+import { tap } from 'rxjs/operators';
+
+// The factory function now depends on both services
+export function appInitializer(appConfigService: AppConfigService, constantsService: ConstantsService) {
+  return () => appConfigService.loadAppConfig().pipe(
+    // Use tap to populate the constants service after the config is loaded
+    tap(config => {
+      constantsService.load(config);
+    })
+  );
+}
+
+@NgModule({
+  declarations: [ AppComponent ],
+  imports: [ BrowserModule, HttpClientModule ],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializer,
+      multi: true,
+      // Add ConstantsService to the dependencies array
+      deps: [AppConfigService, ConstantsService]
+    }
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+    </div>
+
+    <div class="step">
+        <h3>Step 5: Refactor Code to Use the ConstantsService</h3>
+        <p>Finally, you must find all places that imported from the old <code>constants.ts</code> and refactor them to inject and use the new <code>ConstantsService</code>.</p>
+        
+        <h4>Generic Refactoring Example</h4>
+        <p><strong>Before:</strong></p>
+        <pre><code>import { rootUrl, authUrl } from '../shared/header/constants';
+
+// ...
+
+const endpoint = rootUrl + authUrl + '/login';</code></pre>
+
+        <p><strong>After:</strong></p>
+        <pre><code>import { ConstantsService } from '../shared/header/constants.service';
+
+// ...
+
+constructor(private constants: ConstantsService) {}
+
+someMethod() {
+    const endpoint = this.constants.rootUrl + this.constants.authUrl + '/login';
+}
+</code></pre>
+
+        <hr style="margin: 25px 0;">
+
+        <h4>Concrete Example: Refactoring <code>login.service.ts</code></h4>
+        <p>Here is the specific change for your actual <code>login.service.ts</code> file.</p>
+        <p><strong>Before:</strong></p>
+        <span class="filename">src/app/services/login.service.ts</span>
+        <pre><code>import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { rootUrl } from 'src/app/shared/header/constants';
+import { authUrl }  from 'src/app/shared/header/constants';
+import { emailUrl }  from 'src/app/shared/header/constants';
+import { EmailModel } from '../model/email-model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoginService {
+    public mailData: EmailModel;
+  constructor(private http:HttpClient) { 
+    this.mailData= new EmailModel();
+  }
+ //generamos el token
+ public generateToken(loginData:any){
+  console.log("entering generateToken function....");
+  console.log(`${rootUrl}${authUrl}/signin`);
+  console.log(`login.service (logingData): ${loginData.email}`);
+  console.log(loginData);
+  
+
+  return this.http.post(`${rootUrl}${authUrl}/signin` ,loginData);
+
+}
+public resetPassword(emailAddress:string){
+  return this.http.post(`${emailUrl}/htmlemail/${emailAddress}`,this.mailData);
+}
+
+  // ... other methods
+}
+</code></pre>
+
+        <p><strong>After:</strong></p>
+        <span class="filename">src/app/services/login.service.ts</span>
+        <pre><code>import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { EmailModel } from '../model/email-model';
+import { ConstantsService } from '../shared/header/constants.service'; // &lt;-- 1. Import ConstantsService
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoginService {
+    public mailData: EmailModel;
+
+  // 2. Inject ConstantsService in the constructor
+  constructor(private http: HttpClient, private constants: ConstantsService) { 
+    this.mailData = new EmailModel();
+  }
+
+ //generamos el token
+ public generateToken(loginData:any){
+  console.log("entering generateToken function....");
+
+  // 3. Use the injected service properties to build the URL
+  const signinUrl = `${this.constants.rootUrl}${this.constants.authUrl}/signin`;
+
+  console.log(signinUrl);
+  console.log(`login.service (logingData): ${loginData.email}`);
+  console.log(loginData);
+  
+  return this.http.post(signinUrl, loginData);
+}
+
+public resetPassword(emailAddress:string){
+  // 4. Also use the service here for the emailUrl
+  const resetUrl = `${this.constants.emailUrl}/htmlemail/${emailAddress}`;
+  return this.http.post(resetUrl, this.mailData);
+}
+
+  // ... other methods (getToken, setUser, etc. do not need changes)
+}
+</code></pre>
+        <p>Once you have refactored all usages, you can safely delete the old <code>src/app/shared/header/constants.ts</code> file.</p>
+    </div>
+
+    <div class="step">
+        <h2>Step 6: The Final Piece: Dockerfile and Entrypoint Script</h2>
+        <p>This is the magic that connects the Docker container's environment to your Angular application's filesystem. It involves two files: the <code>Dockerfile</code> and the <code>entrypoint.sh</code> script.</p>
+
+        <h3>A Detailed Look at <code>entrypoint.sh</code></h3>
+        <p>This small shell script is the most critical part of the runtime configuration puzzle. It runs every time the container starts, just before the web server is launched.</p>
+        <span class="filename">entrypoint.sh</span>
+        <pre><code>#!/bin/sh
+
+# Line 1: Substitute environment variables and create the config file
+envsubst &lt; /usr/share/nginx/html/config.template.json > /usr/share/nginx/html/assets/config/config.json
+
+# Line 2: Start the Nginx web server
+exec nginx -g 'daemon off;'</code></pre>
+
+        <h4>Line 1 Breakdown: <code>envsubst ...</code></h4>
+        <p>This line dynamically generates the <code>config.json</code> file that your Angular app will fetch.</p>
+        <ul>
+            <li><strong><code>envsubst</code></strong>: This is a standard command-line utility that substitutes environment variables into shell format strings. It reads from standard input and writes to standard output.</li>
+            <li><strong><code>&lt; /usr/share/nginx/html/config.template.json</code></strong>: This is **input redirection**. It tells the shell to feed the content of your <code>config.template.json</code> file into the <code>envsubst</code> command.</li>
+            <li><strong>How it works</strong>: The <code>envsubst</code> command reads the template content (e.g., <code>{ "rootUrl": "${ROOT_URL}" }</code>). It finds the <code>${ROOT_URL}</code> placeholder, looks for an environment variable named <code>ROOT_URL</code> inside the container, and replaces the placeholder with that variable's value.</li>
+            <li><strong><code>> /usr/share/nginx/html/assets/config/config.json</code></strong>: This is **output redirection**. It takes the result from <code>envsubst</code> (which is now a valid JSON string with the real values) and writes it to a new file at the specified path. This path is exactly where your <code>AppConfigService</code> is configured to look for it.</li>
+        </ul>
+
+        <h4>Line 2 Breakdown: <code>exec nginx -g 'daemon off;'</code></h4>
+        <p>This line starts the web server, but the way it's done is very important for running applications in Docker correctly.</p>
+        <ul>
+            <li><strong><code>nginx -g 'daemon off;'</code></strong>: This is the command to start the Nginx server. The <code>-g 'daemon off;'</code> directive is crucial: it tells Nginx to run in the **foreground**. By default, Nginx runs as a background daemon. In Docker, a container exits if its main process finishes. Running in the foreground ensures the container stays alive to serve traffic.</li>
+            <li><strong><code>exec</code></strong>: This is the most important command for ensuring a stable container. The <code>exec</code> command **replaces the current process** (the shell script itself) with the new process (Nginx). 
+            Why does this matter? In a Docker container, the very first process to start gets Process ID 1 (PID 1). This PID 1 process is special: it's responsible for receiving signals from the Docker daemon, such as the shutdown signal from a <code>docker stop</code> command. If you don't use <code>exec</code>, the shell script remains as PID 1. The script then starts Nginx as a child process. When Docker sends a shutdown signal, the shell script receives it but may not pass it along to Nginx. This can cause an abrupt, unclean shutdown. By using <code>exec</code>, the Nginx process becomes PID 1 itself, allowing it to directly receive signals from Docker and perform a graceful shutdown.</li>
+        </ul>
+
+        <h3>The Role of the <code>Dockerfile</code></h3>
+        <p>The Dockerfile sets the stage for the entrypoint script to work.</p>
+        <span class="filename">Dockerfile</span>
+        <pre><code>### STAGE 1: Build ###
+FROM node:18-alpine AS build
+# ... (Angular build process)
+
+### STAGE 2: Serve ###
+FROM nginx:1.25-alpine
+
+# 1. Copy the script and make it executable
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
+
+# 2. Copy the template file
+COPY config.template.json /usr/share/nginx/html/config.template.json
+
+# ... (Copy built files and nginx config)
+
+# 3. Set our script as the command to run when the container starts
+ENTRYPOINT ["/entrypoint.sh"]
+</code></pre>
+    </div>
+
+    <div class="step" style="background-color: #e8f5e9; border-left-color: #4caf50;">
+        <h2>Step 7: Putting It All Together: Building and Running the Container</h2>
+        <p>After you have implemented all the code changes, you can build your Docker image and run a container with your dynamic configuration.</p>
+
+        <h3>1. Build the Docker Image</h3>
+        <p>Run this command from the root of your project (the same directory as your <code>Dockerfile</code>).</p>
+        <pre><code>docker build -t webkeyfront .</code></pre>
+        <ul>
+            <li><strong><code>docker build</code></strong>: The command to build an image from a Dockerfile.</li>
+            <li><strong><code>-t webkeyfront</code></strong>: The <code>-t</code> flag tags the image with a memorable name (<code>webkeyfront</code>).</li>
+            <li><strong><code>.</code></strong>: The final dot specifies the build context, which is the current directory.</li>
+        </ul>
+
+        <h3>2. Run the Docker Container</h3>
+        <p>Now you can run a container from the image you just built, passing in the environment variables.</p>
+        <pre><code>docker run --name my-webkey-app -d -p 8080:80 \
+  -e ROOT_URL="https://api.production.com" \
+  -e EMAIL_URL="https://email.production.com" \
+  -e FRONTEND_URL="https://app.production.com" \
+  webkeyfront</code></pre>
+        <ul>
+            <li><strong><code>docker run</code></strong>: The command to create and start a container.</li>
+            <li><strong><code>--name my-webkey-app</code></strong>: Assigns a custom name to your container for easier management.</li>
+            <li><strong><code>-d</code></strong>: Runs the container in detached mode (in the background).</li>
+            <li><strong><code>-p 8080:80</code></strong>: Maps port 8080 on your local machine to port 80 inside the container. You will access the app at <code>http://localhost:8080</code>.</li>
+            <li><strong><code>-e ROOT_URL="..."</code></strong>: Sets the <code>ROOT_URL</code> environment variable inside the container. The entrypoint script will use this value to generate the <code>config.json</code>.</li>
+            <li><strong><code>webkeyfront</code></strong>: The name of the image to run.</li>
+        </ul>
+    </div>
+
+</body>
+</html>
+</html>

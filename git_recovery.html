@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Recovery Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f6f8fa;
+            color: #24292e;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #d1d5da;
+        }
+        h1, h2, h3 {
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            border-radius: 3px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        pre {
+            background-color: #f6f8fa;
+            padding: 16px;
+            border-radius: 3px;
+            overflow: auto;
+        }
+        .warning {
+            background-color: #fffbdd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .info {
+            background-color: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Git Recovery Guide</h1>
+
+        <h2>1. How to Revert Local Uncommitted Changes</h2>
+        <p>This is for when you have made changes to files in your project, have not committed them, and want to discard them completely.</p>
+        
+        <pre><code>git reset --hard HEAD</code></pre>
+        
+        <p><strong>What it does:</strong> This command resets your entire project to match the last commit. It discards all changes in your working directory and staging area.</p>
+        <div class="warning">
+            <strong>Warning:</strong> This action is destructive and cannot be undone. All of your uncommitted local changes will be permanently lost.
+        </div>
+
+        <h3>Alternative:</h3>
+        <pre><code>git checkout -- .</code></pre>
+        <p>This is a slightly less powerful command that only discards changes in the working directory, but not the staging area.</p>
+
+        <hr>
+
+        <h2>2. How to Revert to a Specific Older Commit</h2>
+        <p>This is for when you want to go back in time to a specific version of your project that you have already committed.</p>
+
+        <h3>Step 1: Find the Commit Hash</h3>
+        <p>First, you need to find the unique identifier (hash) of the commit you want to go back to. You can see the project history with:</p>
+        <pre><code>git log --oneline</code></pre>
+        <p>This will show you a list of commits, each with a short hash (e.g., <code>3d7ee29</code>).</p>
+
+        <h3>Step 2: Reset to the Commit</h3>
+        <p>Once you have the hash, you can reset your project to that state.</p>
+        <pre><code>git reset --hard &lt;commit_hash&gt;</code></pre>
+        <p>For example:</p>
+        <pre><code>git reset --hard 3d7ee29</code></pre>
+        <div class="warning">
+            <strong>Warning:</strong> This rewrites your project's history. All commits made *after* the one you reset to will be removed from your local branch. This can be very problematic if you have already shared those commits on GitHub.
+        </div>
+
+        <hr>
+
+        <h2>3. How to Revert to Match the GitHub Repository</h2>
+        <p>This is for when your local project has changes and/or commits that you want to completely discard, making your local branch an exact copy of the remote repository on GitHub.</p>
+
+        <h3>Step 1: Fetch the Latest State from GitHub</h3>
+        <p>First, download the latest information from the remote repository (named <code>origin</code> by default).</p>
+        <pre><code>git fetch origin</code></pre>
+
+        <h3>Step 2: Reset Your Local Branch to Match the Remote</h3>
+        <p>Now, force your local branch to be identical to the one you just fetched. You will need to specify the branch name, which is commonly <code>master</code> or <code>main</code>.</p>
+        <pre><code>git reset --hard origin/master</code></pre>
+        <p><em>(If your main branch is called <code>main</code>, use <code>origin/main</code> instead)</em></p>
+        <div class="warning">
+            <strong>Warning:</strong> This is highly destructive. It throws away <strong>all</strong> local changes and commits that you have not pushed to GitHub. Your local branch will become an exact replica of the remote branch.
+        </div>
+        
+        <hr>
+
+        <h2>4. How to Check Out a Specific Version from GitHub (Non-Destructive)</h2>
+        <p>Use these commands when you want to safely look at or build an old version of your code without losing your current work.</p>
+
+        <div class="info">
+            <strong>Info:</strong> The following <code>git checkout</code> commands will put you in a state called a "detached HEAD". This means you are viewing a snapshot of your project's history, but you are not on a formal branch. It's safe for inspection, but if you want to save any new work, you must create a new branch.
+        </div>
+
+        <h3>4.1 From a Specific Commit</h3>
+        <p>If you want to view the project as it existed at a specific commit:</p>
+        <ol>
+            <li><strong>Fetch latest data:</strong> <code>git fetch origin</code></li>
+            <li><strong>Checkout the commit:</strong> <code>git checkout &lt;commit_hash&gt;</code> (e.g., <code>git checkout 3d7ee29</code>)</li>
+        </ol>
+        <p>Your files will now match that commit. To return to your main branch:</p>
+        <pre><code>git checkout master</code></pre>
+
+        <h3>4.2 From a Specific Tag</h3>
+        <p>Tags are often used to mark release versions (e.g., <code>v1.2.0</code>). This is the best way to get the code for a specific release.</p>
+        <ol>
+            <li><strong>Fetch all tags from GitHub:</strong> <pre><code>git fetch --all --tags</code></pre></li>
+            <li><strong>List available tags (optional):</strong> <pre><code>git tag</code></pre></li>
+            <li><strong>Checkout the tag:</strong> <pre><code>git checkout tags/&lt;tag_name&gt;</code></pre> (e.g., <code>git checkout tags/v1.2.0</code>)</li>
+        </ol>
+        <p>Your files will now match that release tag. To return to your main branch:</p>
+        <pre><code>git checkout master</code></pre>
+
+        <h3>What to do in a "Detached HEAD" state?</h3>
+        <p>If you decide you want to make changes starting from this old version, you must create a new branch first:</p>
+        <pre><code>git checkout -b &lt;new_branch_name&gt;</code></pre>
+        <p>This creates a new branch with the old code, allowing you to commit your work safely without losing it.</p>
+
+    </div>
+</body>
+</html>

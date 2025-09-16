@@ -117,6 +117,7 @@ export class LoginComponent implements OnInit{
   }
   ResetPassword(){
     if(this.loginData.email.trim() == '' || this.loginData.email.trim() == null){
+      this.notifica.SweetMessage(`The Email or user can't be empty`);
       return;
     }
     this.notifica.SweetMessage(`Check your Email: ${this.loginData.email} for Reset password notification`);
