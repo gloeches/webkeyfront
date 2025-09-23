@@ -5,21 +5,33 @@ import { Observable, catchError, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessagesService } from './messages.service';
 import { VersionModel } from '../model/version';
-import { apiUrl, rootUrl } from 'src/app/shared/header/constants';
-import { authUrl }  from 'src/app/shared/header/constants';
+import { ConstantsService } from '../shared/header/constants.service'; // <-- 1. Import ConstantsService
+//import { rootUrl } from 'src/app/shared/header/constants';
+import { authUrl, apiUrl}  from 'src/app/shared/header/constants';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnterpriseService {
-  private enterpriseUrl=`${rootUrl}${apiUrl}/enterprise`;
-  private enterpriseAdminUrl=`${rootUrl}${apiUrl}/admin/enterprise`;
-  private enterprisesUrl=`${rootUrl}${apiUrl}/enterprises`;
+  public rootUrl:string;
+  private enterpriseUrl:string;
+  private enterpriseAdminUrl:string;
+  private enterprisesUrl:string
   httpOptions={
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
-  constructor( private http: HttpClient, private messageService: MessagesService) { };
+  constructor( private http: HttpClient, private messageService: MessagesService,private constantsService: ConstantsService) { 
+    this.rootUrl=this.constantsService.rootUrl;
+    this.enterpriseUrl=`${this.rootUrl}${apiUrl}/enterprise`;
+    this.enterpriseAdminUrl=`${this.rootUrl}${apiUrl}/admin/enterprise`;
+    this.enterprisesUrl=`${this.rootUrl}${apiUrl}/enterprises`;
+    console.log('EnterpriseService: constructor');
+    console.log('EnterpriseService: rootUrl='+this.rootUrl);
+    console.log('EnterpriseService: enterpriseUrl='+this.enterpriseUrl);
+    console.log('EnterpriseService: enterpriseAdminUrl='+this.enterpriseAdminUrl);
+    console.log('EnterpriseService: enterprisesUrl='+this.enterprisesUrl);
+  };
  
   getEnterprises(): Observable<Enterprise[]>{
     console.log ('getEnterprises collecting data')
@@ -48,7 +60,7 @@ export class EnterpriseService {
 
   getVersion(): Observable<VersionModel>{
     
-    const myUrl=`${rootUrl}${authUrl}/version`;
+    const myUrl=`${this.rootUrl}${authUrl}/version`;
 //    const myUrl="http://localhost:8080/api/v1/auth/version"
     console.log("entering version module: "+myUrl);
     return this.http.get<VersionModel>(myUrl);

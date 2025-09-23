@@ -1,19 +1,31 @@
 <div class="container">
+    <h4>Version Information</h4>
     <div class="row">
-        <div class="col-4">
-            <p> backend version: {{version.versionDate}} : {{version.versionContent}}</p>
+        <div class="col-md-6">
+            <p><strong>Backend Version:</strong> {{version.versionDate}} : {{version.versionContent}}</p>
         </div>
-
-        <div class="col-4">
-            <p> Frontend version: 06-sept-2025 : 03.00</p>
+        <div class="col-md-6">
+            <p><strong>Frontend Version:</strong> 23-sept-2025 : 03.00</p>
         </div>
     </div>
+
+    <hr>
+
+    <h4>Runtime Configuration</h4>
     <div class="row">
-        <div class="col-4">
-            <a class="link-primary" [routerLink]="'/'">back to Home</a>
+        <div class="col-md-12">
+            <p><strong>Root URL (API):</strong> {{ rootUrl }}</p>
+            <p><strong>Email URL:</strong> {{ emailUrl }}</p>
+            <p><strong>Frontend URL:</strong> {{ frontendUrl }}</p>
         </div>
-        
     </div>
 
+    <hr>
+
+    <div class="row">
+        <div class="col-12">
+            <a class="link-primary" [routerLink]="'/'">Back to Home</a>
+        </div>
+    </div>
 </div>
 

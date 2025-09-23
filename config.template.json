@@ -1,0 +1,5 @@
+{
+  "rootUrl": "${ROOT_URL}",
+  "emailUrl": "${EMAIL_URL}",
+  "frontendUrl": "${FRONTEND_URL}"
+}

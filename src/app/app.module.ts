@@ -33,9 +33,20 @@ import { MessagesDialogComponent } from './messages/messages-dialog/messages-dia
 import { HomeComponent } from './pages/home/home.component';
 import { RoleComponent } from './pages/role/role/role.component';
 import { ResetComponent } from './auth/reset/reset.component';
+import { AppConfigService } from './services/app-config.service';
+import { ConstantsService } from './shared/header/constants.service'; // <-- Import ConstantsService
 import { HighlightPipe } from './shared/highlight.pipe';
+import { APP_INITIALIZER } from '@angular/core';
+import { tap } from 'rxjs/operators';
 
-
+export function appInitializer(appConfigService: AppConfigService, constantsService: ConstantsService) {
+  return () => appConfigService.loadAppConfig().pipe(
+    // Use tap to populate the constants service after the config is loaded
+    tap(config => {
+      constantsService.load(config);
+    })
+  );
+}
 
 
 @NgModule({
@@ -76,7 +87,16 @@ import { HighlightPipe } from './shared/highlight.pipe';
     ReactiveFormsModule,
     MatSnackBarModule
   ],
-  providers: [authInterceptorProviders],
+  providers: [
+    authInterceptorProviders,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializer,
+      multi: true,
+      // Add ConstantsService to the dependencies array
+      deps: [AppConfigService, ConstantsService]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

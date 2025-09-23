@@ -302,7 +302,144 @@ public resetPassword(emailAddress:string){
     </div>
 
     <div class="step">
-        <h2>Step 6: The Final Piece: Dockerfile and Entrypoint Script</h2>
+        <h3>Step 6: Display Configuration in the Version Component</h3>
+        <p>To make it easy to verify that your runtime configuration is being loaded correctly, you can display the values in your application's version or diagnostics page.</p>
+
+        <h4>Refactoring <code>version.component.ts</code></h4>
+        <p>First, inject the <code>ConstantsService</code> and expose the configuration properties to the template.</p>
+        <p><strong>Before:</strong></p>
+        <span class="filename">src/app/version/version.component.ts</span>
+        <pre><code>import { Component } from '@angular/core';
+import { EnterpriseService } from '../services/enterprise.service';
+import { VersionModel } from '../model/version';
+@Component({
+  selector: 'app-version',
+  templateUrl: './version.component.html',
+  styleUrls: ['./version.component.css']
+})
+export class VersionComponent {
+  public version: VersionModel;
+
+
+  constructor(private enterpriseService: EnterpriseService){
+    this.version = new VersionModel();
+    this.getVersion()};
+
+  getVersion():void{
+    this.enterpriseService.getVersion().subscribe((res)=>{
+                            this.version.versionDate=res.versionDate;
+                            this.version.versionContent=res.versionContent;
+                            console.log("getversion method has returned: ");
+                            console.log(this.version);
+                            console.log(" from backend")
+    })
+
+  }
+
+
+
+}</code></pre>
+
+        <p><strong>After:</strong></p>
+        <span class="filename">src/app/version/version.component.ts</span>
+        <pre><code>import { Component } from '@angular/core';
+import { EnterpriseService } from '../services/enterprise.service';
+import { VersionModel } from '../model/version';
+import { ConstantsService } from '../shared/header/constants.service'; // &lt;-- 1. Import ConstantsService
+
+@Component({
+  selector: 'app-version',
+  templateUrl: './version.component.html',
+  styleUrls: ['./version.component.css']
+})
+export class VersionComponent {
+  public version: VersionModel;
+  // 2. Add properties to hold config values
+  public rootUrl: string;
+  public emailUrl: string;
+  public frontendUrl: string;
+
+  // 3. Inject ConstantsService
+  constructor(private enterpriseService: EnterpriseService, private constants: ConstantsService) {
+    this.version = new VersionModel();
+    this.getVersion();
+
+    // 4. Assign values from the service
+    this.rootUrl = this.constants.rootUrl;
+    this.emailUrl = this.constants.emailUrl;
+    this.frontendUrl = this.constants.frontendUrl;
+  }
+
+  getVersion(): void {
+    this.enterpriseService.getVersion().subscribe((res) => {
+      this.version.versionDate = res.versionDate;
+      this.version.versionContent = res.versionContent;
+      console.log("getversion method has returned: ");
+      console.log(this.version);
+      console.log(" from backend")
+    })
+  }
+}</code></pre>
+
+        <h4>Updating <code>version.component.html</code></h4>
+        <p>Now, display the new properties in the component's template.</p>
+        <p><strong>Before:</strong></p>
+        <span class="filename">src/app/version/version.component.html</span>
+        <pre><code>&lt;div class="container"&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="col-4"&gt;
+            &lt;p&gt; backend version: {{version.versionDate}} : {{version.versionContent}}&lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;div class="col-4"&gt;
+            &lt;p&gt; Frontend version: 23-sept-2025 : 03.00&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="col-4"&gt;
+            &lt;a class="link-primary" [routerLink]="'/'"&gt;back to Home&lt;/a&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+
+&lt;/div&gt;</code></pre>
+
+        <p><strong>After:</strong></p>
+        <span class="filename">src/app/version/version.component.html</span>
+        <pre><code>&lt;div class="container"&gt;
+    &lt;h4&gt;Version Information&lt;/h4&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="col-md-6"&gt;
+            &lt;p&gt;&lt;strong&gt;Backend Version:&lt;/strong&gt; {{version.versionDate}} : {{version.versionContent}}&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class="col-md-6"&gt;
+            &lt;p&gt;&lt;strong&gt;Frontend Version:&lt;/strong&gt; 23-sept-2025 : 03.00&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;hr&gt;
+
+    &lt;h4&gt;Runtime Configuration&lt;/h4&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="col-md-12"&gt;
+            &lt;p&gt;&lt;strong&gt;Root URL (API):&lt;/strong&gt; {{ rootUrl }}&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Email URL:&lt;/strong&gt; {{ emailUrl }}&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Frontend URL:&lt;/strong&gt; {{ frontendUrl }}&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;hr&gt;
+
+    &lt;div class="row"&gt;
+        &lt;div class="col-12"&gt;
+            &lt;a class="link-primary" [routerLink]="'/'"&gt;Back to Home&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="step">
+        <h2>Step 7: The Final Piece: Dockerfile and Entrypoint Script</h2>
         <p>This is the magic that connects the Docker container's environment to your Angular application's filesystem. It involves two files: the <code>Dockerfile</code> and the <code>entrypoint.sh</code> script.</p>
 
         <h3>A Detailed Look at <code>entrypoint.sh</code></h3>
@@ -357,7 +494,7 @@ ENTRYPOINT ["/entrypoint.sh"]
     </div>
 
     <div class="step" style="background-color: #e8f5e9; border-left-color: #4caf50;">
-        <h2>Step 7: Putting It All Together: Building and Running the Container</h2>
+        <h2>Step 8: Putting It All Together: Building and Running the Container</h2>
         <p>After you have implemented all the code changes, you can build your Docker image and run a container with your dynamic configuration.</p>
 
         <h3>1. Build the Docker Image</h3>
