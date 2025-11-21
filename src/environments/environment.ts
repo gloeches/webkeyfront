@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    rootUrl: 'http://localhost:8085',
-    emailUrl: 'http://localhost:8095/apache_email/api/v1',
-    frontendUrl: 'http://localhost:4200'
+    rootUrl: 'http://poseidonw.local:8085',
+    emailUrl: 'http://poseidonw.local:8090/apache_email/api/v1',
+    frontendUrl: 'http://poseidonw.local'
 };

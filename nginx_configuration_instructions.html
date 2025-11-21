@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGINX Configuration Explained</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px solid #ddd; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: monospace; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Understanding Your NGINX Configuration for Angular</h1>
+        <p>This guide explains the purpose of the <code>nginx.conf</code> file used to serve your Angular Single-Page Application (SPA), especially within a Docker container.</p>
+
+        <h2>The <code>server</code> Block: A Virtual Host</h2>
+        <p>Think of the <code>server { ... }</code> block as a blueprint for a single website. NGINX can host many websites on the same machine, and it uses <code>server</code> blocks to know how to handle traffic for each one. When a request comes into NGINX, its first job is to decide which of these blueprints to use.</p>
+        <p>This decision is primarily made using two directives: <code>listen</code> and <code>server_name</code>.</p>
+
+        <h3><code>listen 80;</code></h3>
+        <ul>
+            <li><strong>What it is:</strong> This directive tells NGINX to monitor a specific network "port" on the server for incoming connections. Port 80 is the universally recognized default port for all standard HTTP web traffic.</li>
+            <li><strong>Why it's necessary:</strong> A server has thousands of ports to manage different services. By listening on port 80, NGINX declares itself as the primary handler for web requests. When you type <code>http://some-address</code> into your browser, the browser automatically connects to port 80.</li>
+        </ul>
+
+        <h3><code>server_name localhost;</code></h3>
+        <ul>
+            <li><strong>What it is:</strong> This is the crucial directive NGINX uses to distinguish between different websites hosted on the <em>same IP address and port</em>. It tells NGINX: "This <code>server</code> block is responsible for traffic intended for the website named 'localhost'."</li>
+            <li><strong>How it works:</strong> When your browser makes a request, it sends a <code>Host</code> header that specifies the domain name you typed in (e.g., <code>Host: localhost</code>). NGINX reads this header and matches it against the <code>server_name</code> in its available <code>server</code> blocks. If it finds a match, it uses the rules inside that block.</li>
+            <li><strong>In a production scenario:</strong> You would change this to your public domain name, for example: <code>server_name www.my-awesome-app.com;</code>.</li>
+        </ul>
+
+        <h3><code>location /</code> and <code>try_files</code></h3>
+        <p>This is the logic that makes your Angular app work behind a web server.</p>
+        <ul>
+            <li><strong><code>location / { ... }</code></strong>: This catches all incoming requests because every request URI starts with a <code>/</code>.</li>
+            <li><strong><code>try_files $uri $uri/ /index.html;</code></strong>: This directive works in a sequence of three steps:
+                <ol>
+                    <li><strong><code>$uri</code> (Try as a file):</strong> NGINX looks for a file that exactly matches the request URI (e.g., <code>/assets/logo.png</code>). If found, it serves it. This is how your CSS, JS, and image assets are delivered.</li>
+                    <li><strong><code>$uri/</code> (Try as a directory):</strong> If no file is found, NGINX checks if the URI matches a directory. This rarely succeeds for an Angular app.</li>
+                    <li><strong><code>/index.html</code> (The Fallback):</strong> If both checks fail (which they will for any Angular route like <code>/home</code> or <code>/users</code>), NGINX serves the <code>index.html</code> file. The Angular router then loads and interprets the URL to display the correct component.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <hr>
+
+        <h2>Configuration Examples</h2>
+
+        <h3>Example 1: Single Server Configuration</h3>
+        <p>This is a standard configuration for serving a single Angular application. It listens on port 80 for traffic intended for <code>www.my-app.com</code> and serves the application.</p>
+        <pre><code>
+server {
+    listen 80;
+    server_name www.my-app.com;
+
+    # Path to the root of your built Angular app
+    root /var/www/my-app/html;
+    index index.html;
+
+    # Fallback for SPA routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+        </code></pre>
+
+        <h3>Example 2: Two-Server Configuration</h3>
+        <p>This example shows how NGINX can serve two different websites from the same server. NGINX uses the <code>server_name</code> to decide which site to show.</p>
+        <pre><code>
+# Configuration for the first application
+server {
+    listen 80;
+    server_name www.app-one.com;
+
+    root /var/www/app-one/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+
+# Configuration for the second application
+server {
+    listen 80;
+    server_name www.app-two.com;
+
+    root /var/www/app-two/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+        </code></pre>
+    </div>
+</body>
+</html>
