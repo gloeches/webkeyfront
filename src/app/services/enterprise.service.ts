@@ -6,8 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessagesService } from './messages.service';
 import { VersionModel } from '../model/version';
 import { ConstantsService } from '../shared/header/constants.service'; // <-- 1. Import ConstantsService
-//import { rootUrl } from 'src/app/shared/header/constants';
-import { authUrl, apiUrl}  from 'src/app/shared/header/constants';
+
 
 
 @Injectable({
@@ -23,9 +22,9 @@ export class EnterpriseService {
   };
   constructor( private http: HttpClient, private messageService: MessagesService,private constantsService: ConstantsService) { 
     this.rootUrl=this.constantsService.rootUrl;
-    this.enterpriseUrl=`${this.rootUrl}${apiUrl}/enterprise`;
-    this.enterpriseAdminUrl=`${this.rootUrl}${apiUrl}/admin/enterprise`;
-    this.enterprisesUrl=`${this.rootUrl}${apiUrl}/enterprises`;
+    this.enterpriseUrl=`${this.rootUrl}${this.constantsService.apiUrl}/enterprise`;
+    this.enterpriseAdminUrl=`${this.rootUrl}${this.constantsService.apiUrl}/admin/enterprise`;
+    this.enterprisesUrl=`${this.rootUrl}${this.constantsService.apiUrl}/enterprises`;
     console.log('EnterpriseService: constructor');
     console.log('EnterpriseService: rootUrl='+this.rootUrl);
     console.log('EnterpriseService: enterpriseUrl='+this.enterpriseUrl);
@@ -60,7 +59,7 @@ export class EnterpriseService {
 
   getVersion(): Observable<VersionModel>{
     
-    const myUrl=`${this.rootUrl}${authUrl}/version`;
+    const myUrl=`${this.constantsService.rootUrl}${this.constantsService.authUrl}/version`;
 //    const myUrl="http://localhost:8080/api/v1/auth/version"
     console.log("entering version module: "+myUrl);
     return this.http.get<VersionModel>(myUrl);

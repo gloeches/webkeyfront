@@ -1,19 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { apiUrl, rootUrl } from 'src/app/shared/header/constants';
-import { authUrl }  from 'src/app/shared/header/constants';
 import { UsuarioModel } from '../model/usuario-model';
-
+import { ConstantsService } from '../shared/header/constants.service'; // <-- 1. Import ConstantsService
 @Injectable({
   providedIn: 'root'
 })
 export class RoleService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private constants: ConstantsService) { }
 
   public getRole(){
-    console.log(`${rootUrl}${apiUrl}/role`);
-    return this.httpClient.get<UsuarioModel>(`${rootUrl}${apiUrl}/role`);
+    console.log(`${this.constants.rootUrl}${this.constants.apiUrl}/role`);
+    return this.httpClient.get<UsuarioModel>(`${this.constants.rootUrl}${this.constants.apiUrl}/role`);
   }
 }

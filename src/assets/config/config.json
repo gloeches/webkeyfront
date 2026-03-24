@@ -1,5 +1,5 @@
 {
-  "rootUrl": "http://poseidonw.local:8085",
-  "emailUrl": "http://poseidonw.local:8095/apache_email/api/v1",
-  "frontendUrl": "http://poseidonw.local"
+  "rootUrl": "http://desarrollo:8085",
+  "emailUrl": "http://desarrol:8095/apache_email/api/v1",
+  "frontendUrl": "http://desarrollo:4200"
 }
